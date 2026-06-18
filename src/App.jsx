@@ -1,8 +1,16 @@
-import { useState } from 'react';
+import './App.css';
+import { useEffect, useState } from 'react';
 
 function App() {
 // Create state to hold the input value
-const [scholarships, setScholarshipst] = useState([]);
+const [scholarships, setScholarships] = useState(() => {
+  const savedData = localStorage.getItem('tracked_scholarships');
+  return savedData ? JSON.parse(savedData) : [];
+});
+
+useEffect(() => {
+  localStorage.setItem('tracked_scholarships', JSON.stringify(scholarships));
+},[scholarships]);
 
 // Hold all form data in a single object state 
 const [formData, setFormData] = useState({
@@ -12,6 +20,9 @@ const [formData, setFormData] = useState({
   status: '', 
   priority: ''
 });
+
+const [editId, setEditId] = useState(null);
+const [isFormOpen, setIsFormOpen] = useState(false);
 
 // Universal function for every input
 const handleInputChange = (event) => {
@@ -24,6 +35,24 @@ const handleInputChange = (event) => {
     });
 };
  
+// Triggered when clicking Edit button on a card
+const handleEdit = (scholarship) => {
+  setEditId(scholarship.id); // Saves the ID of what is being edited
+  setFormData({...scholarship});  // Fills the form fields with this data
+  setIsFormOpen(true);
+
+}
+
+const handleCancelEdit = () => {
+  setEditId(null);
+  setFormData({scholarshipName: '', 
+    amount: '', 
+    deadline: '', 
+    status: '', 
+    priority: '' });
+    setIsFormOpen(false);
+}
+
 // Handle the form submission
 const handleSubmit = (event) => {
   event.preventDefault(); // Prevents browser from refreshing the page
@@ -34,26 +63,46 @@ const handleSubmit = (event) => {
       return;
     }
 
-
-  setScholarships([
-    ...scholarships,
-    { ...formData, id: Date.now() }
-  ]);
+    if(editId) {
+      // Updates existing fields
+      setScholarships(scholarships.map(item => item.id === editId ? { ...formData, id: editId} : item));
+      setEditId(null);
+    } else {
+      // Creates new field
+      setScholarships([ ...scholarships, { ...formData, id: Date.now()}]);
+    }
 
   // Clear form fields after submitting
-  setFormData({
-    scholarshipName: '',
-    amount: '',
-    deadline: '',
-    status: '',
-    priority: '',
-  })
+  setFormData({scholarshipName: '', 
+    amount: '', 
+    deadline: '', 
+    status: '', 
+    priority: '' });
+    setIsFormOpen(false);
 };
 
   // Define add scholarship button
   const handleAddButton = () => {
-    
+    setEditId(null);
+    setFormData({scholarshipName: '', 
+    amount: '', 
+    deadline: '', 
+    status: '', 
+    priority: '' })
+    setIsFormOpen(true);
   };
+
+  const handleDelete = (id, name) => {
+    const confirmed = window.confirm(`Are you sure you want to delete the "${name}" scholarship?`);
+
+    if (!confirmed) return;
+
+    setScholarships(scholarships.filter((item) => item.id !== id));
+    if(editId === id) handleCancelEdit();
+    setIsFormOpen(false);
+  };
+
+  const totalScholarshipMoney = scholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   return (
     <>
@@ -62,36 +111,41 @@ const handleSubmit = (event) => {
 
       <button onClick={handleAddButton}>Add Scholarship</button>
 
-      <div style={{padding: '20px'}}>
-        <h2>Add New Scholarship</h2>
+      {isFormOpen && (
+        <div className='form-container'>
 
         <form onSubmit={handleSubmit}>
-          <label>Scholarship Name:
+          <div className='form-group'>
+            <label className='form-label'>Scholarship Name</label>
             <input type="text" 
             name="scholarshipName"
             value={formData.scholarshipName} // Force input to mirror state
             onChange={handleInputChange} // Listen for typing events
             placeholder="e.g., STEM Merit Award"
             />
-          </label>
-          <label>
-            Amount:
+          </div>
+          <div className='form-group'>
+            <label className='form-label'>Amount</label>
             <input type="number" 
             name="amount"
             value={formData.amount}
             onChange={handleInputChange}
-            placeholder="e.g., 10000" />
-          </label>
-          <label>
-            Deadline:
+            placeholder="e.g., 10000" 
+            />
+          </div>
+          
+          <div className='form-group'>
+            <label className='form-label'>Deadline</label>
             <input type="date" 
             name="deadline"
             value={formData.deadline}
             onChange={handleInputChange}
-            placeholder="e.g., 10000" />
-          </label>
-          <label>
-            Application Status:
+            placeholder="e.g., 10000" 
+            />
+          </div>
+          
+          <div className='form-group'>
+            <label className='form-label'>Application Status</label>
             <select 
             name="status"
             value={formData.status}
@@ -103,9 +157,10 @@ const handleSubmit = (event) => {
               <option value="Submitted">Submitted</option>
               <option value="Won">Won 🏆</option>
             </select>
-          </label>
-          <label>
-            Priority:
+          </div>
+          
+          <div className='form-group'>
+            <label className='form-label'>Priority</label>
             <select 
             name="priority"
             value={formData.priority}
@@ -116,22 +171,75 @@ const handleSubmit = (event) => {
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>
             </select>
-          </label>
-          <button type="submit">Track Scholarship</button>
+          </div>
+  
+          <button type="submit" className='submit-btn'>
+            {editId ? '✏️ Update Scholarship' : 'Track Scholarship'}
+          </button>
+          {editId && (
+            <button type='button' className='cancel-btn' onClick={handleCancelEdit}>
+              Cancel
+            </button>
+          )}
         </form>
+        </div>
+        )}
+        <div className="total-tracker-card">
+          <span className='info-label'>💰 Total Potential Funding</span>
+          <div className="amount-value">
+            ${totalScholarshipMoney.toLocaleString()}
+          </div>
+        </div>
 
         <h2>Tracked Scholarships</h2>
+        <div className='scholarship-grid'>
+            {scholarships.map((scholarship) => (
+            <div key={scholarship.id} className='scholarship-card'>
 
-        {scholarshipsList.map((scholarship) => (
-          <div key={scholarship.id}>
-            <h3>{scholarship.scholarshipName}</h3>
-            <p>Amout: ${scholarship.amount}</p>
-            <p>Deadline: {scholarship.deadline}</p>
-            <p>Status: {scholarship.status}</p>
-            <p>Priority: {scholarship/priority}</p>
+            <div className='card-header'>
+              <h3 className='card-title'>{scholarship.scholarshipName}</h3>
+              <div className="header-actions">
+                <span className={`priority-badge priority-${scholarship.priority?.toLowerCase()}`}> 
+               🔥 {scholarship.priority}</span>
+                <button className="edit-btn" 
+                onClick={() => handleEdit(scholarship)}
+                title='Edit Scholarship'>
+                  ✏️
+                </button>
+
+               <button className='delete-btn' 
+               onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} 
+               title='Delete Scholarship'>
+                🗑️
+               </button>
+              </div>
+              
+              </div>  
+
+              <hr className='card-divider'/>
+            
+              <div>
+                <span className='info-label'>Amount</span>
+                <span className='amount-value'>
+                  ${Number(scholarship.amount).toLocaleString()}
+                </span>
+              </div>
+
+                <div className='metadata-grid'>
+                    <div>
+                      <span className='info-label'>📅 Deadline</span>
+                      <span className='meta-value'>{scholarship.deadline}</span>
+                    </div>
+                    <div>
+                      <span className='info-label'>📌 Status</span>
+                      <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
+                        {scholarship.status}
+                      </span>
+                    </div>
+                </div>
             </div>
         ))}
-      </div>
+        </div> 
     </>
   );
 }
