@@ -1,5 +1,6 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import logoImg from './imgs/logo.png'
 
 function App() {
 // Create state to hold the input value
@@ -106,10 +107,14 @@ const handleSubmit = (event) => {
 
   return (
     <>
-      <h1>My Scholarships</h1>
-      <h3>Welcome!</h3>
+      <header className="app-header">
+        <div className="logo-container">
+          <img src={logoImg} alt="ScholarTrack Logo" className='app-logo'/>
+        </div>
+        <p className='page-subtitle'>Track every scholarship in one place</p>
+      </header>
 
-      <button onClick={handleAddButton}>Add Scholarship</button>
+      <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
 
       {isFormOpen && (
         <div className='form-container'>
