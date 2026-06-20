@@ -1,6 +1,7 @@
 import './styles.js';
 import { useEffect, useState } from 'react';
-import logoImg from './imgs/logo.png'
+import logoImg from './imgs/logo.png';
+import confetti from 'canvas-confetti';
 
 function App() {
 // Create state to hold the input value
@@ -24,8 +25,18 @@ const [formData, setFormData] = useState({
 
 const [editId, setEditId] = useState(null);
 const [isFormOpen, setIsFormOpen] = useState(false);
-
 const [filters, setFilters] = useState({searchTerm: '', statusFilter:'', priorityFilter:'', sortBy: ''});
+
+const formatDate = (dateString) => {
+  if (!dateString) return 'No Deadline';
+  const [year, month, day] = dateString.split('-');
+  const date = new Date(year, month-1, day);
+  return date.toLocaleDateString('en-US', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric'
+  });
+};
 
 const handleFilterChange = (event) => {
   const { name, value } = event.target;
@@ -69,6 +80,14 @@ const handleSubmit = (event) => {
     if( !formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority){
       alert("Please fill out all fields!");
       return;
+    }
+    if (formData.status === 'Won') {
+      confetti ({
+        particleCount: 150,
+        spread: 80,
+        origin: { y: 0.6 },
+        colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe']
+      })
     }
 
     if(editId) {
@@ -301,7 +320,7 @@ const handleSubmit = (event) => {
                 <div className='metadata-grid'>
                     <div>
                       <span className='info-label'>📅 Deadline</span>
-                      <span className='meta-value'>{scholarship.deadline}</span>
+                      <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
                     </div>
                     <div>
                       <span className='info-label'>📌 Status</span>
