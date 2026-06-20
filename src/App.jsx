@@ -7,6 +7,7 @@ import { RiMoneyDollarCircleLine } from 'react-icons/ri';
 import Header from './components/Header';
 import ControlsPanel from './components/ControlsPanel';
 import TotalTracker from './components/TotalTracker';
+import StatsPanel from './components/statsPanel';
 
 
 function App() {
@@ -190,8 +191,6 @@ const handleSubmit = (event) => {
 
       <ControlsPanel filters={filters} onFilterChange={handleFilterChange} />
 
-      <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
-
       {isFormOpen && (
         <div className='form-container' onClick={handleCancelEdit}>
           <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
@@ -241,9 +240,13 @@ const handleSubmit = (event) => {
         </div>
       )}
 
-      <TotalTracker totalMoney={totalScholarshipMoney} />
+      <div className="summary-container">
+        <StatsPanel scholarships={scholarships} />
+        <TotalTracker totalMoney={totalScholarshipMoney} />
+      </div>
 
         <h2>Tracked Scholarships</h2>
+        <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
         <div className='scholarship-grid'>
             {filterAndSortedScholarships.map((scholarship) => (
             <div key={scholarship.id} className='scholarship-card'>
