@@ -1,0 +1,37 @@
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  /* Main Layout & Base Adjustments */
+  #root {
+    padding: 1rem;
+  }
+
+  /* Header Components */
+  .app-logo {
+    height: 140px;
+  }
+  
+  .page-subtitle {
+    font-size: 1.5rem;
+  }
+
+  /* Controls Panel Component */
+  .controls-panel {
+    flex-direction: column;
+  }
+
+  .controls-panel > * {
+    width: 100%;
+  }
+
+  /* Structural Content Containers */
+  .form-container, 
+  .total-tracker-card {
+    padding: 20px;
+  }
+
+  /* Grid Layouts */
+  .metadata-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

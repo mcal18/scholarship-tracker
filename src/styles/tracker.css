@@ -1,0 +1,37 @@
+/* TOTAL TRACKER */
+
+/* The main summary panel container */
+.total-tracker-card {
+  background-color: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  margin: 20px auto;
+  max-width: 450px;
+}
+
+/* Small header text inside the tracker card */
+.total-label {
+  color: #fbbf24;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Big counter text showing the accumulated value */
+.total-amount {
+  font-size: 3rem;
+  margin-top: 5px;
+}
+
+/* Mobile responsive layout adjustment */
+@media (max-width: 768px) {
+  .total-tracker-card {
+    padding: 20px;
+  }
+  
+  .total-amount {
+    font-size: 3rem;
+  }
+}

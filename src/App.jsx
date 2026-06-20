@@ -1,4 +1,4 @@
-import './App.css';
+import './styles.js';
 import { useEffect, useState } from 'react';
 import logoImg from './imgs/logo.png'
 
@@ -24,6 +24,13 @@ const [formData, setFormData] = useState({
 
 const [editId, setEditId] = useState(null);
 const [isFormOpen, setIsFormOpen] = useState(false);
+
+const [filters, setFilters] = useState({searchTerm: '', statusFilter:'', priorityFilter:'', sortBy: ''});
+
+const handleFilterChange = (event) => {
+  const { name, value } = event.target;
+  setFilters({ ...filters, [name]: value});
+}
 
 // Universal function for every input
 const handleInputChange = (event) => {
@@ -103,7 +110,34 @@ const handleSubmit = (event) => {
     setIsFormOpen(false);
   };
 
-  const totalScholarshipMoney = scholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+  const filterAndSortedScholarships = scholarships
+    .filter((item) => {
+      // Search filter
+      const matchesSearch = item.scholarshipName
+        .toLowerCase()
+        .includes(filters.searchTerm.toLowerCase());
+        
+        // Status filter
+        const matchesStatus = filters.statusFilter === '' || item.status === filters.statusFilter;
+
+        // Priority filter
+        const matchesPriority = filters.priorityFilter === '' || item.priority === filters.priorityFilter;
+
+        return matchesSearch && matchesStatus && matchesPriority;
+    })
+    .sort((a, b) => {
+      // Sort Matrix
+      if (filters.sortBy === 'deadline') {
+        return new Date(a.deadline) - new Date(b.deadline);
+      }
+      if (filters.sortBy === 'amount') {
+        return Number(b.amount) - Number(a.amount);
+      }
+      return 0;
+    });
+
+  const totalScholarshipMoney = filterAndSortedScholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
+
 
   return (
     <>
@@ -113,6 +147,40 @@ const handleSubmit = (event) => {
         </div>
         <p className='page-subtitle'>Track every scholarship in one place</p>
       </header>
+
+      <div className="controls-panel">
+        {/* Search Input */}
+        <input type="text" 
+          name='searchTerm' 
+          placeholder='Search scholarships'
+          value={filters.searchTerm}
+          onChange={handleFilterChange}
+        />
+
+        {/* Status Filter */}
+        <select name="statusFilter" value={filters.statusFilter} onChange={handleFilterChange}>
+          <option value="">All Statuses</option>
+          <option value="Not Started">Not Started</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Won">Won</option>
+        </select>
+
+        {/* Priority Filter */}
+        <select name="priorityFilter" value={filters.priorityFilter} onChange={handleFilterChange}>
+          <option value="">All Priorities</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        {/* Sort Order */}
+        <select name="sortBy" value={filters.sortBy} onChange={handleFilterChange}>
+          <option value="">No Sorting</option>
+          <option value="deadline">Sort by Deadline</option>
+          <option value="amount">Sort by Amount</option>
+        </select>
+      </div>
 
       <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
 
@@ -198,7 +266,7 @@ const handleSubmit = (event) => {
 
         <h2>Tracked Scholarships</h2>
         <div className='scholarship-grid'>
-            {scholarships.map((scholarship) => (
+            {filterAndSortedScholarships.map((scholarship) => (
             <div key={scholarship.id} className='scholarship-card'>
 
             <div className='card-header'>

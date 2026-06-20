@@ -1,0 +1,162 @@
+/* SCHOLARSHIP GRID */
+
+.scholarship-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 28px;
+  margin-top: 40px;
+}
+
+/* SCHOLARSHIP CARD */
+
+.scholarship-card {
+  background-color: #111827;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.35s ease,
+    border-color 0.2s ease;
+}
+
+.scholarship-card:hover {
+  transform: translateY(-6px);
+  border-color: #2cb67d;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+}
+
+/* CARD HEADER */
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.card-title {
+  margin: 0;
+  color: #fffffe;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.card-divider {
+  border: none;
+  height: 1px;
+  background-color: #242426;
+  margin: 0;
+}
+
+/* ========================================
+   PRIORITY BADGES
+======================================== */
+
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  transition: transform 0.2s ease;
+}
+
+.scholarship-card:hover .priority-badge {
+  transform: scale(1.05);
+}
+
+.priority-high {
+  background: linear-gradient(135deg, #7f1d1d, #ff4d6d);
+  color: #ffffff;
+}
+
+.priority-medium {
+  background: linear-gradient(135deg, #B45309, #fbbf24);
+  color: #ffffff;
+}
+
+.priority-low {
+  background: linear-gradient(135deg, #0f766e, #00f5ff);
+  color: #ffffff;
+}
+
+/* ========================================
+   AMOUNT
+======================================== */
+
+.info-label {
+  font-size: 0.85rem;
+  color: #94a1b2;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.amount-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+/* ========================================
+   METADATA
+======================================== */
+
+.metadata-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.meta-value {
+  font-size: 0.95rem;
+  color: #fffffe;
+  font-weight: 500;
+}
+
+.status-won {
+  color: #2cb67d;
+  font-weight: 600;
+}
+
+/* ========================================
+   CARD ACTIONS
+======================================== */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn,
+.delete-btn {
+  opacity: 0;
+  pointer-events: none;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.scholarship-card:hover .edit-btn,
+.scholarship-card:hover .delete-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  transform: scale(1.1);
+}
