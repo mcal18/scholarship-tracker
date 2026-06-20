@@ -160,3 +160,11 @@
 .delete-btn:hover {
   transform: scale(1.1);
 }
+
+/* React icons style */
+.info-label svg,
+.priority-badge svg {
+  margin-right: 4px;
+  vertical-align: middle;
+  display: inline-block;
+}

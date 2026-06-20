@@ -2,6 +2,10 @@ import './styles.js';
 import { useEffect, useState } from 'react';
 import logoImg from './imgs/logo.png';
 import confetti from 'canvas-confetti';
+import { FiEdit2, FiTrash2, FiCalendar, FiCheckSquare, FiX } from 'react-icons/fi';
+import { FaFire } from 'react-icons/fa';
+import { RiMoneyDollarCircleLine } from 'react-icons/ri';
+
 
 function App() {
 // Create state to hold the input value
@@ -204,13 +208,17 @@ const handleSubmit = (event) => {
       <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
 
       {isFormOpen && (
-        <div className='form-container'>
+        <div className='form-container' onClick={handleCancelEdit}>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
+          <button type="button" className="form-close-btn" onClick={handleCancelEdit} title="Close Form">
+            <FiX />
+          </button>
           <div className='form-group'>
             <label className='form-label'>Scholarship Name</label>
             <input type="text" 
             name="scholarshipName"
+            className='form-input'
             value={formData.scholarshipName} // Force input to mirror state
             onChange={handleInputChange} // Listen for typing events
             placeholder="e.g., STEM Merit Award"
@@ -220,6 +228,7 @@ const handleSubmit = (event) => {
             <label className='form-label'>Amount</label>
             <input type="number" 
             name="amount"
+            className='form-input'
             value={formData.amount}
             onChange={handleInputChange}
             placeholder="e.g., 10000" 
@@ -230,6 +239,7 @@ const handleSubmit = (event) => {
             <label className='form-label'>Deadline</label>
             <input type="date" 
             name="deadline"
+            className='form-input'
             value={formData.deadline}
             onChange={handleInputChange}
             placeholder="e.g., 10000" 
@@ -240,6 +250,7 @@ const handleSubmit = (event) => {
             <label className='form-label'>Application Status</label>
             <select 
             name="status"
+            className='form-input'
             value={formData.status}
             onChange={handleInputChange}
             >
@@ -256,6 +267,7 @@ const handleSubmit = (event) => {
             <select 
             name="priority"
             value={formData.priority}
+            className='form-input'
             onChange={handleInputChange}
             >
               <option value="" disabled hidden>-- Select Priority --</option>
@@ -266,7 +278,7 @@ const handleSubmit = (event) => {
           </div>
   
           <button type="submit" className='submit-btn'>
-            {editId ? '✏️ Update Scholarship' : 'Track Scholarship'}
+            {editId ? ' Update Scholarship' : 'Track Scholarship'}
           </button>
           {editId && (
             <button type='button' className='cancel-btn' onClick={handleCancelEdit}>
@@ -277,7 +289,7 @@ const handleSubmit = (event) => {
         </div>
         )}
         <div className="total-tracker-card">
-          <span className='info-label'>💰 Total Potential Funding</span>
+          <span className='info-label'><RiMoneyDollarCircleLine/> Total Potential Funding</span>
           <div className="amount-value">
             ${totalScholarshipMoney.toLocaleString()}
           </div>
@@ -291,21 +303,17 @@ const handleSubmit = (event) => {
             <div className='card-header'>
               <h3 className='card-title'>{scholarship.scholarshipName}</h3>
               <div className="header-actions">
-                <span className={`priority-badge priority-${scholarship.priority?.toLowerCase()}`}> 
-               🔥 {scholarship.priority}</span>
-                <button className="edit-btn" 
-                onClick={() => handleEdit(scholarship)}
-                title='Edit Scholarship'>
-                  ✏️
+                <span className={`priority-badge priority-${scholarship.priority?.toLowerCase()}`}>
+                  <FaFire /> {scholarship.priority}
+                </span>
+                <button className="edit-btn" onClick={() => handleEdit(scholarship)} title='Edit Scholarship'>
+                  <FiEdit2 />
                 </button>
-
-               <button className='delete-btn' 
-               onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} 
-               title='Delete Scholarship'>
-                🗑️
-               </button>
+                <button className='delete-btn' onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} title='Delete Scholarship'>
+                  <FiTrash2 />
+                </button>
               </div>
-              
+
               </div>  
 
               <hr className='card-divider'/>
@@ -318,17 +326,17 @@ const handleSubmit = (event) => {
               </div>
 
                 <div className='metadata-grid'>
-                    <div>
-                      <span className='info-label'>📅 Deadline</span>
-                      <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
-                    </div>
-                    <div>
-                      <span className='info-label'>📌 Status</span>
-                      <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
-                        {scholarship.status}
-                      </span>
-                    </div>
-                </div>
+                  <div>
+                    <span className='info-label'><FiCalendar/> Deadline</span>
+                    <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
+                  </div>
+                  <div>
+                    <span className='info-label'><FiCheckSquare/> Status</span>
+                    <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
+                      {scholarship.status}
+                    </span>
+                  </div>
+                  </div>
             </div>
         ))}
         </div> 
