@@ -198,3 +198,63 @@
   background-color: rgba(96, 165, 250, 0.1);
   color: #60a5fa;
 }
+
+/* CARD CHECKLIST TASK */
+.task-divider {
+  border: none;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.05);
+  margin: 12px 0 6px 0;
+}
+
+.task-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: #94a1b2;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 0;
+  font-size: 0.9rem;
+  color: #fffffe;
+}
+
+.task-checkbox {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background-color: #081120;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.task-checkbox:checked {
+  background-color: #22c55e;
+  border-color: #22c55e;
+}
+
+.task-checkbox:checked::after{
+  content: '✓';
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.task-text-completed {
+  text-decoration: line-through;
+  color: #64748b !important;
+}

@@ -11,105 +11,107 @@ import StatsPanel from './components/statsPanel';
 
 
 function App() {
-// Create state to hold the input value
-const [scholarships, setScholarships] = useState(() => {
-  const savedData = localStorage.getItem('tracked_scholarships');
-  return savedData ? JSON.parse(savedData) : [];
-});
-
-useEffect(() => {
-  localStorage.setItem('tracked_scholarships', JSON.stringify(scholarships));
-},[scholarships]);
-
-// Hold all form data in a single object state 
-const [formData, setFormData] = useState({
-  scholarshipName: '',
-  amount: '',
-  deadline: '',
-  status: '', 
-  priority: ''
-});
-
-const [editId, setEditId] = useState(null);
-const [isFormOpen, setIsFormOpen] = useState(false);
-const [filters, setFilters] = useState({searchTerm: '', statusFilter:'', priorityFilter:'', sortBy: ''});
-
-const formatDate = (dateString) => {
-  if (!dateString) return 'No Deadline';
-  const [year, month, day] = dateString.split('-');
-  const date = new Date(year, month-1, day);
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: '2-digit',
-    year: 'numeric'
+  // Create state to hold the input value
+  const [scholarships, setScholarships] = useState(() => {
+    const savedData = localStorage.getItem('tracked_scholarships');
+    return savedData ? JSON.parse(savedData) : [];
   });
-};
 
-const getDaysRemaining = (dateString) => {
-  if (!dateString) return null;
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const [year, month, day] = dateString.split('-');
-  const deadlineDate = new Date(year, month-1, day);
-  const differenceInTime = deadlineDate.getTime() - today.getTime();
-  const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+  useEffect(() => {
+    localStorage.setItem('tracked_scholarships', JSON.stringify(scholarships));
+  }, [scholarships]);
 
-  if (differenceInDays < 0) {
-    return { text: 'Overdue', className: 'countdown-overdue' };
-  } else if (differenceInDays === 0) {
-    return { text: 'Due Today!', className: 'countdown-urgent'};
-  } else if (differenceInDays === 1) {
-    return { text: '1 day left', className: 'countdown-urgent'};
-  } else {
-    return { text: `${differenceInDays} days left`, className: 'countdown-normal'};
+  // Hold all form data in a single object state 
+  const [formData, setFormData] = useState({
+    scholarshipName: '',
+    amount: '',
+    deadline: '',
+    status: '',
+    priority: ''
+  });
+
+  const [editId, setEditId] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [filters, setFilters] = useState({ searchTerm: '', statusFilter: '', priorityFilter: '', sortBy: '' });
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'No Deadline';
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const getDaysRemaining = (dateString) => {
+    if (!dateString) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const [year, month, day] = dateString.split('-');
+    const deadlineDate = new Date(year, month - 1, day);
+    const differenceInTime = deadlineDate.getTime() - today.getTime();
+    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
+
+    if (differenceInDays < 0) {
+      return { text: 'Overdue', className: 'countdown-overdue' };
+    } else if (differenceInDays === 0) {
+      return { text: 'Due Today!', className: 'countdown-urgent' };
+    } else if (differenceInDays === 1) {
+      return { text: '1 day left', className: 'countdown-urgent' };
+    } else {
+      return { text: `${differenceInDays} days left`, className: 'countdown-normal' };
+    }
+  };
+
+  const handleFilterChange = (event) => {
+    const { name, value } = event.target;
+    setFilters({ ...filters, [name]: value });
   }
-};
 
-const handleFilterChange = (event) => {
-  const { name, value } = event.target;
-  setFilters({ ...filters, [name]: value});
-}
-
-// Universal function for every input
-const handleInputChange = (event) => {
-  const { name, value } = event.target;
+  // Universal function for every input
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
 
     //Updates only the specifc field that triggered the change event
     setFormData({
       ...formData,  // Copies all existing fields first
       [name]: value // Overwrites just the one that changed
     });
-};
- 
-// Triggered when clicking Edit button on a card
-const handleEdit = (scholarship) => {
-  setEditId(scholarship.id); // Saves the ID of what is being edited
-  setFormData({...scholarship});  // Fills the form fields with this data
-  setIsFormOpen(true);
+  };
 
-}
+  // Triggered when clicking Edit button on a card
+  const handleEdit = (scholarship) => {
+    setEditId(scholarship.id); // Saves the ID of what is being edited
+    setFormData({ ...scholarship });  // Fills the form fields with this data
+    setIsFormOpen(true);
 
-const handleCancelEdit = () => {
-  setEditId(null);
-  setFormData({scholarshipName: '', 
-    amount: '', 
-    deadline: '', 
-    status: '', 
-    priority: '' });
+  }
+
+  const handleCancelEdit = () => {
+    setEditId(null);
+    setFormData({
+      scholarshipName: '',
+      amount: '',
+      deadline: '',
+      status: '',
+      priority: ''
+    });
     setIsFormOpen(false);
-}
+  }
 
-// Handle the form submission
-const handleSubmit = (event) => {
-  event.preventDefault(); // Prevents browser from refreshing the page
+  // Handle the form submission
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevents browser from refreshing the page
 
     // Validation: prevents submit if fields are empty
-    if( !formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority){
+    if (!formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority) {
       alert("Please fill out all fields!");
       return;
     }
     if (formData.status === 'Won') {
-      confetti ({
+      confetti({
         particleCount: 150,
         spread: 80,
         origin: { y: 0.6 },
@@ -117,32 +119,49 @@ const handleSubmit = (event) => {
       })
     }
 
-    if(editId) {
-      // Updates existing fields
-      setScholarships(scholarships.map(item => item.id === editId ? { ...formData, id: editId} : item));
+    if (editId) {
+      setScholarships(scholarships.map(item =>
+        item.id === editId
+          ? { ...formData, id: editId, tasks: item.tasks || [] } // Preserves the tasks!
+          : item
+      ));
       setEditId(null);
     } else {
-      // Creates new field
-      setScholarships([ ...scholarships, { ...formData, id: Date.now()}]);
+      setScholarships([
+        ...scholarships,
+        {
+          ...formData,
+          id: Date.now(),
+          tasks: [
+            { id: 1, text: "Write personal statement essay", completed: false },
+            { id: 2, text: "Request letters of recommendation", completed: false },
+            { id: 3, text: "Gather official academic transcripts", completed: false }
+          ]
+        }
+      ]);
     }
 
-  // Clear form fields after submitting
-  setFormData({scholarshipName: '', 
-    amount: '', 
-    deadline: '', 
-    status: '', 
-    priority: '' });
+    // Clear form fields after submitting
+    setFormData({
+      scholarshipName: '',
+      amount: '',
+      deadline: '',
+      status: '',
+      priority: ''
+    });
     setIsFormOpen(false);
-};
+  };
 
   // Define add scholarship button
   const handleAddButton = () => {
     setEditId(null);
-    setFormData({scholarshipName: '', 
-    amount: '', 
-    deadline: '', 
-    status: '', 
-    priority: '' })
+    setFormData({
+      scholarshipName: '',
+      amount: '',
+      deadline: '',
+      status: '',
+      priority: ''
+    })
     setIsFormOpen(true);
   };
 
@@ -152,8 +171,23 @@ const handleSubmit = (event) => {
     if (!confirmed) return;
 
     setScholarships(scholarships.filter((item) => item.id !== id));
-    if(editId === id) handleCancelEdit();
+    if (editId === id) handleCancelEdit();
     setIsFormOpen(false);
+  };
+
+  const handleToggleTask = (scholarshipId, taskId) => {
+    setScholarships(scholarships.map(item => {
+      if (item.id === scholarshipId) {
+        const currentTask = item.tasks || [];
+        return {
+          ...item,
+          tasks: currentTask.map(task =>
+            task.id === taskId ? { ...task, completed: !task.completed } : task
+          )
+        };
+      }
+      return item;
+    }));
   };
 
   const filterAndSortedScholarships = scholarships
@@ -162,14 +196,14 @@ const handleSubmit = (event) => {
       const matchesSearch = item.scholarshipName
         .toLowerCase()
         .includes(filters.searchTerm.toLowerCase());
-        
-        // Status filter
-        const matchesStatus = filters.statusFilter === '' || item.status === filters.statusFilter;
 
-        // Priority filter
-        const matchesPriority = filters.priorityFilter === '' || item.priority === filters.priorityFilter;
+      // Status filter
+      const matchesStatus = filters.statusFilter === '' || item.status === filters.statusFilter;
 
-        return matchesSearch && matchesStatus && matchesPriority;
+      // Priority filter
+      const matchesPriority = filters.priorityFilter === '' || item.priority === filters.priorityFilter;
+
+      return matchesSearch && matchesStatus && matchesPriority;
     })
     .sort((a, b) => {
       // Sort Matrix
@@ -245,11 +279,11 @@ const handleSubmit = (event) => {
         <TotalTracker totalMoney={totalScholarshipMoney} />
       </div>
 
-        <h2>Tracked Scholarships</h2>
-        <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
-        <div className='scholarship-grid'>
-            {filterAndSortedScholarships.map((scholarship) => (
-            <div key={scholarship.id} className='scholarship-card'>
+      <h2>Tracked Scholarships</h2>
+      <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
+      <div className='scholarship-grid'>
+        {filterAndSortedScholarships.map((scholarship) => (
+          <div key={scholarship.id} className='scholarship-card'>
 
             <div className='card-header'>
               <h3 className='card-title'>{scholarship.scholarshipName}</h3>
@@ -265,42 +299,61 @@ const handleSubmit = (event) => {
                 </button>
               </div>
 
-              </div>  
+            </div>
 
-              <hr className='card-divider'/>
-            
+            <hr className='card-divider' />
+
+            <div>
+              <span className='info-label'>Amount</span>
+              <span className='amount-value'>
+                ${Number(scholarship.amount).toLocaleString()}
+              </span>
+            </div>
+
+            <div className='metadata-grid'>
               <div>
-                <span className='info-label'>Amount</span>
-                <span className='amount-value'>
-                  ${Number(scholarship.amount).toLocaleString()}
+                <span className='info-label'><FiCalendar /> Deadline</span>
+                <div>
+                  <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
+                  {getDaysRemaining(scholarship.deadline) && (
+                    <span className={`countdown-badge ${getDaysRemaining(scholarship.deadline).className}`}>
+                      {getDaysRemaining(scholarship.deadline).text}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div>
+                <span className='info-label'><FiCheckSquare /> Status</span>
+                <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
+                  {scholarship.status}
                 </span>
               </div>
 
-                <div className='metadata-grid'>
-                  <div>
-                    <span className='info-label'><FiCalendar/> Deadline</span>
-                    <div>
-                      <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
-                      {getDaysRemaining(scholarship.deadline) && (
-                        <span className={`countdown-badge ${getDaysRemaining(scholarship.deadline).className}`}>
-                        {getDaysRemaining(scholarship.deadline).text}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <div>
-                    <span className='info-label'><FiCheckSquare/> Status</span>
-                    <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
-                      {scholarship.status}
+              <hr className='task-divider' />
+              <div className="task-list-container">
+                <div className="task-section-header">
+                  <span>Requirements Checklist</span>
+                  <span> {((scholarship.tasks || []).filter(t => t.completed).length)} / {((scholarship.tasks || []).length || 3)} </span>
+                </div>
+                {(scholarship.tasks || [
+                  { id: 1, text: "Write personal statement essay", completed: false },
+                  { id: 2, text: "Request letters of recommendation", completed: false },
+                  { id: 3, text: "Gather official academic transcripts", completed: false }
+                ]).map(task => (
+                  <div key={task.id} className="task-item">
+                    <input type="checkbox" className='task-checkbox' checked={task.completed} onChange={() => handleToggleTask(scholarship.id, task.id)} />
+                    <span className={task.completed ? 'task-text-completed' : ''}>
+                      {task.text}
                     </span>
                   </div>
-                  </div>
+                ))}
+              </div>
             </div>
+          </div>
         ))}
-        </div> 
+      </div>
     </>
   );
 }
 
 export default App;
- 
