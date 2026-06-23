@@ -1,0 +1,9 @@
+import Sidebar from '../components/sidebar';
+
+function Analytics() {
+    return(
+        <h1>Analytics</h1>
+    );
+}
+
+export default Analytics;

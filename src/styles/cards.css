@@ -2,7 +2,7 @@
 
 .scholarship-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 28px;
   margin-top: 40px;
 }
@@ -18,7 +18,7 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
   transition:
     transform 0.2s ease,
     box-shadow 0.35s ease,
@@ -41,6 +41,9 @@
 }
 
 .card-title {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   margin: 0;
   color: #fffffe;
   font-size: 1.4rem;
@@ -141,6 +144,7 @@
 .edit-btn,
 .delete-btn {
   opacity: 0;
+  transform: translateY(-4px);
   pointer-events: none;
   background: transparent !important;
   border: none !important;
@@ -153,6 +157,7 @@
 .scholarship-card:hover .edit-btn,
 .scholarship-card:hover .delete-btn {
   opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
@@ -176,7 +181,6 @@
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
-  width: fit-content;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   margin-top: 2px;
@@ -197,10 +201,16 @@
 .countdown-normal {
   background-color: rgba(96, 165, 250, 0.1);
   color: #60a5fa;
+  border: 1px solid rgba(96,165,250,.25);
 }
 
 /* CARD CHECKLIST TASK */
+.task-list-container {
+  grid-column: 1 / -1;
+}
+
 .task-divider {
+  grid-column: 1 / -1;
   border: none;
   height: 1px;
   background-color: rgba(255, 255, 255, 0.05);
@@ -221,7 +231,7 @@
 
 .task-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   padding: 4px 0;
   font-size: 0.9rem;
@@ -229,6 +239,8 @@
 }
 
 .task-checkbox {
+  flex-shrink: 0;
+  margin-top: 2px;
   appearance: none;
   width: 16px;
   height: 16px;
@@ -257,4 +269,20 @@
 .task-text-completed {
   text-decoration: line-through;
   color: #64748b !important;
+}
+
+.card-notes-section {
+  grid-column: 1 / -1;
+  margin-top: 12px;
+}
+
+.card-notes-text {
+  font-size: 0.9rem;
+  color: #e5e7eb;
+  background-color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+  white-space: pre-wrap;
 }

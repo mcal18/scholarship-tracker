@@ -88,6 +88,13 @@
   box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
 }
 
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  padding: 8px;
+}
+
 @keyframes popupScale {
   from {
     transform: scale(0.92);

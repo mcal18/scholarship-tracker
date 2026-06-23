@@ -3,11 +3,18 @@ import { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { FiEdit2, FiTrash2, FiCalendar, FiCheckSquare, FiX } from 'react-icons/fi';
 import { FaFire } from 'react-icons/fa';
-import { RiMoneyDollarCircleLine } from 'react-icons/ri';
-import Header from './components/Header';
+import { RiMoneyDollarCircleLine, RiTumblrFill } from 'react-icons/ri';
+import toast, { Toaster } from 'react-hot-toast';
+import { Routes, Route } from "react-router-dom";
+import Header from './components/header';
 import ControlsPanel from './components/ControlsPanel';
 import TotalTracker from './components/TotalTracker';
 import StatsPanel from './components/statsPanel';
+import Dashboard from './pages/dashboard';
+import Scholarships from './pages/scholarships';
+import Calendar from './pages/calendar';
+import Analytics from './pages/analytics';
+import Settings from './pages/settings';
 
 
 function App() {
@@ -27,7 +34,8 @@ function App() {
     amount: '',
     deadline: '',
     status: '',
-    priority: ''
+    priority: '',
+    notes: ''
   });
 
   const [editId, setEditId] = useState(null);
@@ -96,7 +104,8 @@ function App() {
       amount: '',
       deadline: '',
       status: '',
-      priority: ''
+      priority: '',
+      notes: ''
     });
     setIsFormOpen(false);
   }
@@ -107,7 +116,7 @@ function App() {
 
     // Validation: prevents submit if fields are empty
     if (!formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority) {
-      alert("Please fill out all fields!");
+      toast.error("Please fill out all fields!");
       return;
     }
     if (formData.status === 'Won') {
@@ -116,7 +125,10 @@ function App() {
         spread: 80,
         origin: { y: 0.6 },
         colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe']
-      })
+      });
+      toast.success(`Congratulations! You won ${formData.scholarshipName} 🏆`, { duration: 5000 });
+    } else {
+      toast.success(editId ? "Scholarship updated!" : "Scholarship tracked successfully!");
     }
 
     if (editId) {
@@ -147,7 +159,8 @@ function App() {
       amount: '',
       deadline: '',
       status: '',
-      priority: ''
+      priority: '',
+      notes: ''
     });
     setIsFormOpen(false);
   };
@@ -160,7 +173,8 @@ function App() {
       amount: '',
       deadline: '',
       status: '',
-      priority: ''
+      priority: '',
+      notes: ''
     })
     setIsFormOpen(true);
   };
@@ -171,6 +185,7 @@ function App() {
     if (!confirmed) return;
 
     setScholarships(scholarships.filter((item) => item.id !== id));
+    toast.success(`Deleted "${name}"`);
     if (editId === id) handleCancelEdit();
     setIsFormOpen(false);
   };
@@ -190,7 +205,7 @@ function App() {
     }));
   };
 
-  const filterAndSortedScholarships = scholarships
+  const filteredAndSortedScholarships = scholarships
     .filter((item) => {
       // Search filter
       const matchesSearch = item.scholarshipName
@@ -216,14 +231,10 @@ function App() {
       return 0;
     });
 
-  const totalScholarshipMoney = filterAndSortedScholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
-
+  const totalScholarshipMoney = filteredAndSortedScholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   return (
     <>
-      <Header />
-
-      <ControlsPanel filters={filters} onFilterChange={handleFilterChange} />
 
       {isFormOpen && (
         <div className='form-container' onClick={handleCancelEdit}>
@@ -262,6 +273,16 @@ function App() {
                 <option value="Low">Low</option>
               </select>
             </div>
+            <div className='form-group'>
+              <label className='form-label'>Application Notes</label>
+              <textarea name="notes"
+                className="form-input form-textarea"
+                value={formData.notes}
+                onChange={handleInputChange}
+                placeholder='Add links, login details, or essay hooks...'
+                rows="3"
+              />
+            </div>
             <button type="submit" className='submit-btn'>
               {editId ? 'Update Scholarship' : 'Track Scholarship'}
             </button>
@@ -273,85 +294,41 @@ function App() {
           </form>
         </div>
       )}
+      <Header />
+      <Toaster position='bottom-right' reverseOrder={false} />
+      <Routes>
+        <Route path="/" element={
+          <Dashboard
+            scholarships={scholarships}
+            totalScholarshipMoney={totalScholarshipMoney}
+          />
+        }
+        />
 
-      <div className="summary-container">
-        <StatsPanel scholarships={scholarships} />
-        <TotalTracker totalMoney={totalScholarshipMoney} />
-      </div>
+        <Route path="/scholarships" element={
+          <Scholarships
+            scholarships={scholarships}
+            filteredAndSortedScholarships={filteredAndSortedScholarships}
+            handleAddButton={handleAddButton}
+            handleEdit={handleEdit}
+            handleDelete={handleDelete}
+            handleToggleTask={handleToggleTask}
+            formatDate={formatDate}
+            getDaysRemaining={getDaysRemaining}
+            filters={filters}
+            handleFilterChange={handleFilterChange}
+          />
+        }
+        />
 
-      <h2>Tracked Scholarships</h2>
-      <button className='add-btn' onClick={handleAddButton}>Add Scholarship</button>
-      <div className='scholarship-grid'>
-        {filterAndSortedScholarships.map((scholarship) => (
-          <div key={scholarship.id} className='scholarship-card'>
+        <Route path="/calendar"
+          element={<Calendar
+          />} />
 
-            <div className='card-header'>
-              <h3 className='card-title'>{scholarship.scholarshipName}</h3>
-              <div className="header-actions">
-                <span className={`priority-badge priority-${scholarship.priority?.toLowerCase()}`}>
-                  <FaFire /> {scholarship.priority}
-                </span>
-                <button className="edit-btn" onClick={() => handleEdit(scholarship)} title='Edit Scholarship'>
-                  <FiEdit2 />
-                </button>
-                <button className='delete-btn' onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} title='Delete Scholarship'>
-                  <FiTrash2 />
-                </button>
-              </div>
+        <Route path="/analytics" element={<Analytics />} />
 
-            </div>
-
-            <hr className='card-divider' />
-
-            <div>
-              <span className='info-label'>Amount</span>
-              <span className='amount-value'>
-                ${Number(scholarship.amount).toLocaleString()}
-              </span>
-            </div>
-
-            <div className='metadata-grid'>
-              <div>
-                <span className='info-label'><FiCalendar /> Deadline</span>
-                <div>
-                  <span className='meta-value'>{formatDate(scholarship.deadline)}</span>
-                  {getDaysRemaining(scholarship.deadline) && (
-                    <span className={`countdown-badge ${getDaysRemaining(scholarship.deadline).className}`}>
-                      {getDaysRemaining(scholarship.deadline).text}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div>
-                <span className='info-label'><FiCheckSquare /> Status</span>
-                <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
-                  {scholarship.status}
-                </span>
-              </div>
-
-              <hr className='task-divider' />
-              <div className="task-list-container">
-                <div className="task-section-header">
-                  <span>Requirements Checklist</span>
-                  <span> {((scholarship.tasks || []).filter(t => t.completed).length)} / {((scholarship.tasks || []).length || 3)} </span>
-                </div>
-                {(scholarship.tasks || [
-                  { id: 1, text: "Write personal statement essay", completed: false },
-                  { id: 2, text: "Request letters of recommendation", completed: false },
-                  { id: 3, text: "Gather official academic transcripts", completed: false }
-                ]).map(task => (
-                  <div key={task.id} className="task-item">
-                    <input type="checkbox" className='task-checkbox' checked={task.completed} onChange={() => handleToggleTask(scholarship.id, task.id)} />
-                    <span className={task.completed ? 'task-text-completed' : ''}>
-                      {task.text}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
     </>
   );
 }
