@@ -6,6 +6,7 @@ import { FaFire } from 'react-icons/fa';
 import { RiMoneyDollarCircleLine, RiTumblrFill } from 'react-icons/ri';
 import toast, { Toaster } from 'react-hot-toast';
 import { Routes, Route } from "react-router-dom";
+import { formatDate, getDaysRemaining } from './utils/dateUtils';
 import Header from './components/header';
 import ControlsPanel from './components/ControlsPanel';
 import TotalTracker from './components/TotalTracker';
@@ -41,37 +42,6 @@ function App() {
   const [editId, setEditId] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [filters, setFilters] = useState({ searchTerm: '', statusFilter: '', priorityFilter: '', sortBy: '' });
-
-  const formatDate = (dateString) => {
-    if (!dateString) return 'No Deadline';
-    const [year, month, day] = dateString.split('-');
-    const date = new Date(year, month - 1, day);
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const getDaysRemaining = (dateString) => {
-    if (!dateString) return null;
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const [year, month, day] = dateString.split('-');
-    const deadlineDate = new Date(year, month - 1, day);
-    const differenceInTime = deadlineDate.getTime() - today.getTime();
-    const differenceInDays = Math.ceil(differenceInTime / (1000 * 3600 * 24));
-
-    if (differenceInDays < 0) {
-      return { text: 'Overdue', className: 'countdown-overdue' };
-    } else if (differenceInDays === 0) {
-      return { text: 'Due Today!', className: 'countdown-urgent' };
-    } else if (differenceInDays === 1) {
-      return { text: '1 day left', className: 'countdown-urgent' };
-    } else {
-      return { text: `${differenceInDays} days left`, className: 'countdown-normal' };
-    }
-  };
 
   const handleFilterChange = (event) => {
     const { name, value } = event.target;
