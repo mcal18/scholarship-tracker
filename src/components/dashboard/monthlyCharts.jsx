@@ -47,14 +47,20 @@ function MonthlyCharts({ scholarships }) {
 
             <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid stroke="rgba(255,255,255,.08" strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
                     <YAxis allowDecimals={false} />
-                    <Tooltip />
+                    <Tooltip  
+                    contentStyle={{
+                        backgroundColor: "#1f2937",
+                        border: "1px solid rgba(255,255,255,.1)",
+                        borderRadius: "12px"
+                    }}
+                    />
 
                     <Bar
                         dataKey="applications"
-                        fill="#4F46E5"
+                        fill="#60a5fa"
                         radius={[5, 5, 0, 0]}
                     />
                 </BarChart>

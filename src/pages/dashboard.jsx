@@ -1,11 +1,15 @@
+import "../styles/dashboard.css"
 import TotalTracker from '../components/TotalTracker';
 import StatsPanel from '../components/statsPanel';
 import UpcomingDeadlines from '../components/dashboard/upcomingDeadlines';
 import MonthlyCharts from '../components/dashboard/monthlyCharts';
+import RecentActivity from '../components/dashboard/recentActivity';
+import QuickActions from "../components/dashboard/quickActions";
 
 function Dashboard({
     scholarships,
-    totalScholarshipMoney }) {
+    totalScholarshipMoney,
+    handleAddButton }) {
     return (
         <>
             <div className="dashboard-page">
@@ -27,10 +31,15 @@ function Dashboard({
 
                     <section className="dashboard-card recent-activity">
                         <h2>Recent Activity</h2>
+                        <RecentActivity scholarships={scholarships} />
                     </section>
 
                     <section className="dashboard-card quick-actions">
                         <h2>Quick Actions</h2>
+                        <QuickActions 
+                            scholarships={scholarships}
+                            onAddScholarship={handleAddButton}
+                        />
                     </section>
                 </div>
             </div>

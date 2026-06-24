@@ -271,6 +271,7 @@ function App() {
           <Dashboard
             scholarships={scholarships}
             totalScholarshipMoney={totalScholarshipMoney}
+            handleAddButton={handleAddButton}
           />
         }
         />

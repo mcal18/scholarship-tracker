@@ -1,10 +1,11 @@
+import "../../styles/upcomingDeadlines.css"
 import React from 'react';
 import { formatDate, getDaysRemaining } from '../../utils/dateUtils';
 
-function UpcomingDeadlines ({scholarships}) {
+function UpcomingDeadlines({ scholarships }) {
     const upcoming = [...scholarships]
         .filter(scholarship => new Date(scholarship.deadline) >= new Date())
-        .sort((a,b) => Date (a.deadline) - new Date(b.deadline))
+        .sort((a, b) => Date(a.deadline) - new Date(b.deadline))
         .slice(0, 5);
 
     return (
@@ -17,10 +18,17 @@ function UpcomingDeadlines ({scholarships}) {
 
                     return (
                         <div key={scholarship.id} className="deadline-item">
-                            <h4>{scholarship.scholarshipName}</h4>
-                            <p>{formatDate(scholarship.deadline)}</p>
-                            <p className={countdown.className}>{countdown.text}</p>
-                            <p>Status: {scholarship.status}</p>
+                            <div className="deadline-top">
+                                <h3>{scholarship.scholarshipName}</h3>
+                                <span className={`deadline-countdown ${countdown.className}`}>{countdown.text}</span>
+
+                            </div>
+
+
+                            <div className="deadline-bottom">
+                                <p>{formatDate(scholarship.deadline)}</p>
+                                <p>Status: {scholarship.status}</p>
+                            </div>
                         </div>
                     );
                 })
