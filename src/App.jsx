@@ -293,8 +293,12 @@ function App() {
         />
 
         <Route path="/calendar"
-          element={<Calendar
-          />} />
+          element={
+            <Calendar
+              scholarships={scholarships}
+            />
+          }
+        />
 
         <Route path="/analytics" element={<Analytics />} />
 
