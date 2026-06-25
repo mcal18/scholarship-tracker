@@ -300,7 +300,12 @@ function App() {
           }
         />
 
-        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/analytics" element={
+          <Analytics
+            scholarships={scholarships}
+          />
+        }
+        />
 
         <Route path="/settings" element={<Settings />} />
       </Routes>
