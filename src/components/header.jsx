@@ -12,6 +12,7 @@ function Header() {
       <nav className="main-nav">
         <NavLink to="/">Dashboard</NavLink>
         <NavLink to="/scholarships">Scholarships</NavLink>
+        <NavLink to="/notifications">Notifications</NavLink>
         <NavLink to="/calendar">Calendar</NavLink>
         <NavLink to="/analytics">Analytics</NavLink>
         <NavLink to="/settings">Settings</NavLink>

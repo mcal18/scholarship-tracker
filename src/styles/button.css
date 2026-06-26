@@ -1,10 +1,10 @@
-/* BUTTONS*/
+/* BUTTONS */
 
 /* Submit/Save button (Primary action) */
 .submit-btn {
   width: 100%;
-  background-color: #22c55e;
-  color: #fffffe;
+  background: var(--success-color);
+  color: var(--text-primary);
   border: none;
   padding: 14px;
   border-radius: 8px;
@@ -15,7 +15,7 @@
 }
 
 .submit-btn:hover {
-  background-color: #16a34a;
+  background: var(--success-hover);
   transform: translateY(-2px);
 }
 
@@ -26,56 +26,69 @@
 /* Cancel button (Secondary action) */
 .cancel-btn {
   flex: 1;
-  background-color: #242426;
-  color: #94a1b2;
-  border: 1px solid #333336;
+  background: var(--card-color);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
   padding: 14px;
   border-radius: 8px;
   font-size: 1rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color .2s ease, color .2s ease;
 }
 
 .cancel-btn:hover {
-  background-color: #ff4a6d;
-  color: #fffffe;
-  border-color: #ff4a6d;
+  background: var(--danger-color);
+  color: var(--text-primary);
+  border-color: var(--danger-color);
 }
 
-/* Add Scholarship toggle button */
+/* Add Scholarship button */
 .add-btn {
   display: block;
   max-width: 200px;
   margin: 20px auto;
-  background-color: rgba(17, 24, 39, 0.6);
+
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #ffffff;
+
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+
   padding: 14px 24px;
   border-radius: 8px;
+
   font-size: 1rem;
   font-weight: 600;
+
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  transition:
+    background-color .2s ease,
+    transform .1s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    color .2s ease;
 }
 
 .add-btn:hover {
-  background-color: rgba(17, 24, 39, 0.8);
-  border-color: #22c55e;
-  color: #22c55e;
+  background: var(--glass-bg-hover);
+  border-color: var(--success-color);
+  color: var(--success-color);
+
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+
+  box-shadow: 0 0 15px rgba(34,197,94,.15);
 }
 
 .add-btn:active {
-  transform: scale(0.98);
+  transform: scale(.98);
 }
 
-/* Media query adjustments for smaller screens */
+/* Responsive */
 @media (max-width: 768px) {
-  .submit-btn, 
-  .cancel-btn, 
+  .submit-btn,
+  .cancel-btn,
   .add-btn {
     width: 100%;
   }

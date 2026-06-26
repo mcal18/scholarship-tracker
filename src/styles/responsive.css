@@ -1,6 +1,7 @@
 /* RESPONSIVE */
 
 @media (max-width: 768px) {
+
   /* Main Layout & Base Adjustments */
   #root {
     padding: 1rem;
@@ -10,9 +11,10 @@
   .app-logo {
     height: 140px;
   }
-  
+
   .page-subtitle {
     font-size: 1.5rem;
+    color: var(--accent-purple);
   }
 
   /* Controls Panel Component */
@@ -25,7 +27,7 @@
   }
 
   /* Structural Content Containers */
-  .form-container, 
+  .form-container,
   .total-tracker-card {
     padding: 20px;
   }

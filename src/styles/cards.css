@@ -10,8 +10,8 @@
 /* SCHOLARSHIP CARD */
 
 .scholarship-card {
-  background-color: #111827;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--card-color);
+  border: 1px solid var(--border-color);
   padding: 28px;
   border-radius: 16px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
@@ -20,14 +20,14 @@
   flex-direction: column;
   gap: 18px;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.35s ease,
-    border-color 0.2s ease;
+    transform .2s ease,
+    box-shadow .35s ease,
+    border-color .2s ease;
 }
 
 .scholarship-card:hover {
   transform: translateY(-6px);
-  border-color: #2cb67d;
+  border-color: var(--success-color);
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
 }
 
@@ -45,32 +45,30 @@
   min-width: 0;
   overflow-wrap: anywhere;
   margin: 0;
-  color: #fffffe;
+  color: var(--text-primary);
   font-size: 1.4rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -.02em;
 }
 
 .card-divider {
   border: none;
   height: 1px;
-  background-color: #242426;
+  background: var(--border-color);
   margin: 0;
 }
 
-/* ========================================
-   PRIORITY BADGES
-======================================== */
+/* PRIORITY BADGES */
 
 .priority-badge {
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: .75rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   white-space: nowrap;
-  transition: transform 0.2s ease;
+  transition: transform .2s ease;
 }
 
 .scholarship-card:hover .priority-badge {
@@ -79,26 +77,24 @@
 
 .priority-high {
   background: linear-gradient(135deg, #7f1d1d, #ff4d6d);
-  color: #ffffff;
+  color: #fff;
 }
 
 .priority-medium {
   background: linear-gradient(135deg, #B45309, #fbbf24);
-  color: #ffffff;
+  color: #fff;
 }
 
 .priority-low {
   background: linear-gradient(135deg, #0f766e, #00f5ff);
-  color: #ffffff;
+  color: #fff;
 }
 
-/* ========================================
-   AMOUNT
-======================================== */
+/* AMOUNT */
 
 .info-label {
-  font-size: 0.85rem;
-  color: #94a1b2;
+  font-size: .85rem;
+  color: var(--text-secondary);
   display: block;
   margin-bottom: 2px;
 }
@@ -106,12 +102,10 @@
 .amount-value {
   font-size: 1.8rem;
   font-weight: 700;
-  color: #22c55e;
+  color: var(--success-color);
 }
 
-/* ========================================
-   METADATA
-======================================== */
+/* METADATA */
 
 .metadata-grid {
   display: grid;
@@ -121,19 +115,17 @@
 }
 
 .meta-value {
-  font-size: 0.95rem;
-  color: #fffffe;
+  font-size: .95rem;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
 .status-won {
-  color: #2cb67d;
+  color: var(--success-color);
   font-weight: 600;
 }
 
-/* ========================================
-   CARD ACTIONS
-======================================== */
+/* CARD ACTIONS */
 
 .header-actions {
   display: flex;
@@ -151,7 +143,7 @@
   cursor: pointer;
   font-size: 1.1rem;
   padding: 4px;
-  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  transition: opacity .2s ease-in-out, transform .2s ease-in-out;
 }
 
 .scholarship-card:hover .edit-btn,
@@ -166,7 +158,8 @@
   transform: scale(1.1);
 }
 
-/* React icons style */
+/* React Icons */
+
 .info-label svg,
 .priority-badge svg {
   margin-right: 4px;
@@ -174,37 +167,39 @@
   display: inline-block;
 }
 
-/* Countdown badges style */
+/* COUNTDOWN BADGES */
+
 .countdown-badge {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: .75rem;
   font-weight: 700;
   padding: 2px 6px;
   border-radius: 4px;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
+  letter-spacing: .02em;
   margin-top: 2px;
 }
 
 .countdown-overdue {
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.2);
+  background: rgba(239,68,68,.1);
+  color: var(--danger-color);
+  border: 1px solid rgba(239,68,68,.2);
 }
 
 .countdown-urgent {
-  background-color: rgba(245, 158, 11, 0.15);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  background: rgba(245,158,11,.15);
+  color: var(--warning-color);
+  border: 1px solid rgba(245,158,11,.3);
 }
 
 .countdown-normal {
-  background-color: rgba(96, 165, 250, 0.1);
-  color: #60a5fa;
+  background: rgba(96,165,250,.1);
+  color: var(--info-color);
   border: 1px solid rgba(96,165,250,.25);
 }
 
-/* CARD CHECKLIST TASK */
+/* TASKS */
+
 .task-list-container {
   grid-column: 1 / -1;
 }
@@ -213,19 +208,19 @@
   grid-column: 1 / -1;
   border: none;
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.05);
-  margin: 12px 0 6px 0;
+  background: var(--border-color);
+  margin: 12px 0 6px;
 }
 
 .task-section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
-  color: #94a1b2;
+  font-size: .75rem;
+  color: var(--text-secondary);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: .05em;
   margin-bottom: 8px;
 }
 
@@ -234,8 +229,8 @@
   align-items: flex-start;
   gap: 10px;
   padding: 4px 0;
-  font-size: 0.9rem;
-  color: #fffffe;
+  font-size: .9rem;
+  color: var(--text-primary);
 }
 
 .task-checkbox {
@@ -244,32 +239,34 @@
   appearance: none;
   width: 16px;
   height: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
-  background-color: #081120;
+  background: var(--background-color);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all .2s ease;
 }
 
 .task-checkbox:checked {
-  background-color: #22c55e;
-  border-color: #22c55e;
+  background: var(--success-color);
+  border-color: var(--success-color);
 }
 
-.task-checkbox:checked::after{
-  content: '✓';
-  color: #ffffff;
+.task-checkbox:checked::after {
+  content: "✓";
+  color: #fff;
   font-size: 10px;
   font-weight: bold;
 }
 
 .task-text-completed {
   text-decoration: line-through;
-  color: #64748b !important;
+  color: var(--text-muted) !important;
 }
+
+/* NOTES */
 
 .card-notes-section {
   grid-column: 1 / -1;
@@ -277,13 +274,12 @@
 }
 
 .card-notes-text {
-  font-size: 0.9rem;
-  color: #e5e7eb;
-  background-color: #1f2937;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: .9rem;
+  color: var(--text-primary);
+  background: var(--card-hover);
+  border: 1px solid var(--border-color);
   padding: 8px;
   border-radius: 6px;
   margin-top: 4px;
   white-space: pre-wrap;
 }
-

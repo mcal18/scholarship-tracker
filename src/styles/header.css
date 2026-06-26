@@ -27,17 +27,19 @@
   font-size: 3rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
+  color: var(--text-primary);
 }
 
 /* Subtitle */
 
 .page-subtitle {
-  color: #A78BFA;
+  color: var(--accent-secondary);
   font-size: 1.5rem;
   margin-bottom: 2rem;
 }
 
-/* Nav */
+/* Navigation */
+
 .main-nav {
   display: flex;
   gap: 1.5rem;
@@ -45,12 +47,17 @@
 
 .main-nav a {
   text-decoration: none;
-  color: #fffffe;
+  color: var(--text-primary);
   font-weight: 500;
+  transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.main-nav a.active{
-  color: #6c63ff;
+.main-nav a:hover {
+  color: var(--accent);
+}
+
+.main-nav a.active {
+  color: var(--accent);
   font-weight: 700;
-  border-bottom: 2px solid #6c63ff;
+  border-bottom: 2px solid var(--accent);
 }

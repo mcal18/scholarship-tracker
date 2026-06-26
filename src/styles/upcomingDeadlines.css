@@ -1,7 +1,7 @@
 /* UPCOMING DEADLINES */
 .deadline-item {
-    background: #1f2937;
-    border: 1px solid rgba(255,255,255, .05);
+    background: var(--surface);
+    border: 1px solid var(--border);
     border-radius: 12px;
     padding: 16px;
     margin-bottom: 12px;
@@ -10,25 +10,25 @@
 
 .deadline-item:hover {
     transform: translateY(-3px);
-    border-color: #60a5fa;
-    box-shadow: 0 8px 20px rgna(0,0,0,.25);
+    border-color: var(--info);
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
 }
 
 .deadline-item .countdown-normal {
     background: rgba(96, 165, 250, .15);
-    color: #60a5fa;
+    color: var(--info);
     border: 1px solid rgba(96, 165, 250, .15);
 }
 
 .deadline-item .countdown-urgent {
     background: rgba(251, 191, 36, .15);
-    color: #fbbf24;
+    color: var(--warning);
     border: 1px solid rgba(251, 191, 36, .3);
 }
 
 .deadline-item .countdown-overdue {
     background: rgba(239, 68, 68, .15);
-    color: #ef4444;
+    color: var(--danger);
     border: 1px solid rgba(239, 68, 68, .3);
 }
 
@@ -40,7 +40,7 @@
 
 .deadline-top h3 {
     margin: 0;
-    color: #fffffe;
+    color: var(--text);
     font-size: 1.05rem;
     font-weight: 600;
 }
@@ -50,11 +50,11 @@
     justify-content: space-between;
     align-items: center;
     margin-top: 12px;
-    color: #94a1b2;
+    color: var(--text-secondary);
     font-size: .85rem;
 }
 
-.deadline-bottom p{
+.deadline-bottom p {
     margin: 0;
 }
 
@@ -66,4 +66,3 @@
     font-weight: 600;
     margin-top: 12px;
 }
-

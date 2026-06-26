@@ -1,0 +1,67 @@
+/* SETTINGS */
+
+.settings-grid {
+    display: grid;
+    gap: 24px;
+}
+
+.settings-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+
+.settings-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: var(--text-primary);
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background .25s ease,
+        transform .2s ease,
+        box-shadow .25s ease;
+}
+
+.settings-btn:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+/* Danger Button */
+
+.settings-btn.danger {
+    background: #991b1b;
+}
+
+.settings-btn.danger:hover {
+    background: #dc2626;
+    box-shadow: 0 10px 25px rgba(220, 38, 38, .35);
+}
+
+/* Layout */
+
+.settings-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}

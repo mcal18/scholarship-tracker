@@ -1,0 +1,32 @@
+/* THEME SETTINGS */
+.theme-options {
+    display: flex;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.theme-options button {
+    flex: 1;
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: var(--surface);
+    color: var(--text);
+
+    cursor: pointer;
+    font-size: .95rem;
+
+    transition: background .25s ease, transform .2s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.theme-options button:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+}
+
+.active-theme {
+    border-color: var(--accent) !important;
+    background: rgba(34, 197, 94, .15);
+}

@@ -16,6 +16,7 @@ import Scholarships from './pages/scholarships';
 import Calendar from './pages/calendar';
 import Analytics from './pages/analytics';
 import Settings from './pages/settings';
+import Notifications from "./pages/notifications";
 
 
 function App() {
@@ -307,7 +308,21 @@ function App() {
         }
         />
 
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/settings" element={
+          <Settings 
+            scholarships={scholarships}
+            setScholarships={setScholarships}
+          />
+        } 
+          />
+
+        <Route
+          path="/notifications" element={
+            <Notifications
+              scholarships={scholarships}
+            />
+          }
+        />
       </Routes>
     </>
   );

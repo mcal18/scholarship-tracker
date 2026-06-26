@@ -1,4 +1,67 @@
-/* GLOBAL STYLES*/
+/* DESIGN TOKENS */
+
+:root {
+  /* Backgrounds */
+  --background: #081120;
+  --background-secondary: #111b35;
+
+  /* Cards */
+  --card: #111827;
+  --surface: #1f2937;
+
+  /* Text */
+  --text: #fffffe;
+  --text-secondary: #94a1b2;
+
+  /* Borders */
+  --border: rgba(255,255,255, 0.05);
+
+  /* Brand */
+  --primary: #4f46e5;
+  --accent: #22c55e;
+
+  /* Status Colors */
+  --success: #22c55e;
+  --warning: #fbbf24;
+  --danger: #ef4444;
+  --info: #60a5fa;
+
+  /* Background gradient */
+  --bg-gradient:
+    radial-gradient(circle at 10% 20%, rgba(96,165,250,.04) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(167,139,250,.04) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(34,197,94,.02) 0%, transparent 60%),
+    linear-gradient(to bottom, var(--background), var(--background-secondary));
+}
+
+/* LIGHT THEME */
+body[data-theme="light"] {
+  --background: #f8fafc;
+  --background-secondary: #e2e8f0;
+
+  --card: #ffffff;
+  --surface: #f1f5f9;
+
+  --text: #111827;
+  --text-secondary: #475569;
+
+  --border: rgba(15, 23, 42, .08);
+
+  --primary: #4f46e5;
+  --accent: #22c55e;
+
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #2563eb;
+
+  --bg-gradient:
+    radial-gradient(circle at 10% 20%, rgba(96,165,250,.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(167,139,250,.05) 0%, transparent 40%),
+    linear-gradient(to bottom, var(--background), var(--background-secondary));
+}
+
+/* GLOBAL STYLES */
 *,
 *::before,
 *::after {
@@ -13,13 +76,14 @@ body {
   margin: 0;
   min-height: 100vh;
 
-  background-image:
-    radial-gradient(circle at 10% 20%, rgba(96,165,250,.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(167,139,250,.04) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(34,197,94,.02) 0%, transparent 60%),
-    linear-gradient(to bottom, #081120, #111B35);
-
+  background-color: var(--background);
+  background-image: var(--bg-gradient);
   background-attachment: fixed;
+
+  color: var(--text);
+  transition:
+    background-color .3s ease,
+    color .3s ease;
 }
 
 img {
