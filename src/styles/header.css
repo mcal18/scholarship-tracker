@@ -1,6 +1,6 @@
 /* HEADER */
 
-/* App Header */
+/* APP HEADER */
 
 .app-header {
   display: flex;
@@ -9,7 +9,7 @@
   margin-bottom: 2rem;
 }
 
-/* Logo */
+/* LOGO */
 
 .app-logo {
   height: 200px;
@@ -19,26 +19,36 @@
   filter:
     drop-shadow(-15px 5px 25px rgba(34, 197, 94, 0.4))
     drop-shadow(10px -5px 20px rgba(96, 165, 250, 0.2));
+
+  transition: filter .3s ease;
 }
 
-/* Page Title */
+/* PAGE TITLE */
 
 .page-title {
+  margin-bottom: .25rem;
+
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 0.25rem;
-  color: var(--text-primary);
+
+  color: var(--heading-color);
+
+  transition: color .3s ease;
 }
 
-/* Subtitle */
+/* SUBTITLE */
 
 .page-subtitle {
-  color: var(--accent-secondary);
-  font-size: 1.5rem;
   margin-bottom: 2rem;
+
+  font-size: 1.5rem;
+
+  color: var(--info-color);
+
+  transition: color .3s ease;
 }
 
-/* Navigation */
+/* NAVIGATION */
 
 .main-nav {
   display: flex;
@@ -46,18 +56,48 @@
 }
 
 .main-nav a {
+  position: relative;
+
   text-decoration: none;
   color: var(--text-primary);
+
   font-weight: 500;
-  transition: color 0.2s ease, border-color 0.2s ease;
+
+  transition:
+    color .2s ease,
+    border-color .2s ease;
 }
 
 .main-nav a:hover {
-  color: var(--accent);
+  color: var(--accent-color);
 }
 
 .main-nav a.active {
-  color: var(--accent);
+  color: var(--accent-color);
   font-weight: 700;
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent-color);
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+  .app-logo {
+    height: 140px;
+  }
+
+  .page-title {
+    font-size: 2.25rem;
+    text-align: center;
+  }
+
+  .page-subtitle {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .main-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
 }

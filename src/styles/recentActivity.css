@@ -19,47 +19,68 @@
     flex-shrink: 0;
 }
 
-/* Status colors (keep these fixed) */
+/* STATUS COLORS */
+
 .status-won {
-    background: #22c55e;
+    background: var(--success-color);
 }
 
 .status-submitted {
-    background: #60a5fa;
+    background: var(--info-color);
 }
 
 .status-in-progress {
-    background: #fbbf24;
+    background: var(--warning-color);
 }
 
 .status-not-started {
-    background: #ef4444;
+    background: var(--danger-color);
 }
 
+/* ACTIVITY CARD */
+
 .activity-item {
-    background-color: var(--surface-bg);
+    background: var(--surface);
     border: 1px solid var(--border-color);
+
     padding: 14px;
     border-radius: 12px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        box-shadow .2s ease,
+        background-color .3s ease;
 }
 
 .activity-item:hover {
     transform: translateY(-4px);
-    border-color: var(--accent);
+    border-color: var(--accent-color);
+    box-shadow: var(--card-shadow);
 }
 
 .activity-item strong {
     color: var(--text-primary);
-    font-size: 0.95rem;
+    font-size: .95rem;
     font-weight: 600;
 }
 
 .activity-item p {
     margin: 4px 0 0;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: .85rem;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+    .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 }

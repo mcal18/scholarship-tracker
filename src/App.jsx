@@ -202,6 +202,34 @@ function App() {
       return 0;
     });
 
+    const [notificationSettings, setNotificationSettings] = useState({
+      upcomingDeadlines: true,
+      urgentDeadlines: true,
+      priorityScholarships: true,
+      browserNotifications: false
+    });
+
+    const [profile, setProfile] = useState(() => {
+      const saved = localStorage.getItem("profile");
+
+      return saved 
+        ? JSON.parse(saved)
+        : {
+          name: "",
+          major: "",
+          university: "",
+          graduationYear: "",
+          scholarshipGoal: ""
+        };
+    });
+
+    useEffect(() => {
+      localStorage.setItem(
+        "profile",
+        JSON.stringify(profile)
+      );
+    }, [profile]);
+
   const totalScholarshipMoney = filteredAndSortedScholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   return (
@@ -312,6 +340,10 @@ function App() {
           <Settings 
             scholarships={scholarships}
             setScholarships={setScholarships}
+            notificationSettings={notificationSettings}
+            setNotificationSettings={setNotificationSettings}
+            profile={profile}
+            setProfile={setProfile}
           />
         } 
           />

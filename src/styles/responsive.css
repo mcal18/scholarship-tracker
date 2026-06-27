@@ -2,22 +2,27 @@
 
 @media (max-width: 768px) {
 
-  /* Main Layout & Base Adjustments */
+  /* Main Layout */
   #root {
     padding: 1rem;
   }
 
-  /* Header Components */
+  /* Header */
   .app-logo {
     height: 140px;
   }
 
-  .page-subtitle {
-    font-size: 1.5rem;
-    color: var(--accent-purple);
+  .page-title {
+    font-size: 2.2rem;
   }
 
-  /* Controls Panel Component */
+  .page-subtitle {
+    font-size: 1.2rem;
+    color: var(--primary);
+    text-align: center;
+  }
+
+  /* Controls Panel */
   .controls-panel {
     flex-direction: column;
   }
@@ -26,7 +31,7 @@
     width: 100%;
   }
 
-  /* Structural Content Containers */
+  /* Form / Cards */
   .form-container,
   .total-tracker-card {
     padding: 20px;
@@ -34,7 +39,7 @@
 
   /* Grid Layouts */
   .metadata-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .summary-container {
@@ -47,5 +52,14 @@
   .total-tracker-card {
     width: 100%;
     max-width: 450px;
+  }
+
+  .dashboard-grid,
+  .calendar-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .scholarship-grid {
+    grid-template-columns: 1fr;
   }
 }

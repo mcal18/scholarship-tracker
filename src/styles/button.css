@@ -1,62 +1,86 @@
 /* BUTTONS */
 
-/* Submit/Save button (Primary action) */
+/* Submit / Save button */
 .submit-btn {
   width: 100%;
   background: var(--success-color);
-  color: var(--text-primary);
+  color: #ffffff;
+
   border: none;
   padding: 14px;
   border-radius: 8px;
+
   font-size: 1rem;
   font-weight: 700;
+
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  transition:
+    background-color .2s ease,
+    transform .1s ease,
+    box-shadow .2s ease;
 }
 
 .submit-btn:hover {
-  background: var(--success-hover);
+  background: var(--accent-color);
   transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34,197,94,.25);
 }
 
 .submit-btn:active {
-  transform: scale(0.98);
+  transform: scale(.98);
 }
 
-/* Cancel button (Secondary action) */
+
+/* CANCEL BUTTON*/
+
 .cancel-btn {
   flex: 1;
+
   background: var(--card-color);
   color: var(--text-secondary);
+
   border: 1px solid var(--border-color);
   padding: 14px;
   border-radius: 8px;
+
   font-size: 1rem;
   font-weight: 700;
+
   cursor: pointer;
-  transition: background-color .2s ease, color .2s ease;
+
+  transition:
+    background-color .2s ease,
+    color .2s ease,
+    border-color .2s ease,
+    transform .2s ease;
 }
 
 .cancel-btn:hover {
   background: var(--danger-color);
-  color: var(--text-primary);
+  color: #ffffff;
   border-color: var(--danger-color);
+  transform: translateY(-2px);
 }
 
-/* Add Scholarship button */
+
+/* ========================================
+   ADD SCHOLARSHIP BUTTON
+======================================== */
+
 .add-btn {
   display: block;
+
   max-width: 200px;
   margin: 20px auto;
 
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-
-  border: 1px solid var(--glass-border);
+  background: var(--card-color);
   color: var(--text-primary);
 
-  padding: 14px 24px;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
+
+  padding: 14px 24px;
 
   font-size: 1rem;
   font-weight: 600;
@@ -65,14 +89,14 @@
 
   transition:
     background-color .2s ease,
-    transform .1s ease,
     border-color .2s ease,
-    box-shadow .2s ease,
-    color .2s ease;
+    color .2s ease,
+    transform .1s ease,
+    box-shadow .2s ease;
 }
 
 .add-btn:hover {
-  background: var(--glass-bg-hover);
+  background: var(--card-hover);
   border-color: var(--success-color);
   color: var(--success-color);
 
@@ -85,7 +109,9 @@
   transform: scale(.98);
 }
 
-/* Responsive */
+
+/* RESPONSIVE */
+
 @media (max-width: 768px) {
   .submit-btn,
   .cancel-btn,

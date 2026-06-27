@@ -1,67 +1,145 @@
-/* DESIGN TOKENS */
+/* DESIGN TOKENS - DARK THEME (DEFAULT) */
 
 :root {
   /* Backgrounds */
   --background: #081120;
   --background-secondary: #111b35;
 
-  /* Cards */
-  --card: #111827;
-  --surface: #1f2937;
+  /* Surfaces */
+  --card-color: #111827;
+  --card-hover: #1f2937;
+  --panel-bg: #111827;
+  --input-bg: #081120;
 
-  /* Text */
-  --text: #fffffe;
+  /* Typography */
+  --heading-color: #fffffe;
+  --text-primary: #fffffe;
   --text-secondary: #94a1b2;
+  --text-muted: #64748b;
 
   /* Borders */
-  --border: rgba(255,255,255, 0.05);
+  --border-color: rgba(255,255,255,.08);
 
   /* Brand */
   --primary: #4f46e5;
-  --accent: #22c55e;
+  --accent-color: #22c55e;
 
-  /* Status Colors */
-  --success: #22c55e;
-  --warning: #fbbf24;
-  --danger: #ef4444;
-  --info: #60a5fa;
+  /* Status */
+  --success-color: #22c55e;
+  --warning-color: #fbbf24;
+  --danger-color: #ef4444;
+  --info-color: #60a5fa;
+
+  /* Card shadows */
+  --card-shadow:
+    0 8px 30px rgba(0,0,0,.40);
+
+  --card-shadow-hover:
+    0 12px 36px rgba(0,0,0,.45);
+
+  /* Priority badges */
+  --priority-high-bg:
+    linear-gradient(135deg,#7f1d1d,#ff4d6d);
+  --priority-high-text: #ffffff;
+
+  --priority-medium-bg:
+    linear-gradient(135deg,#b45309,#fbbf24);
+  --priority-medium-text: #ffffff;
+
+  --priority-low-bg:
+    linear-gradient(135deg,#0f766e,#00f5ff);
+  --priority-low-text: #ffffff;
 
   /* Background gradient */
   --bg-gradient:
-    radial-gradient(circle at 10% 20%, rgba(96,165,250,.04) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(167,139,250,.04) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(34,197,94,.02) 0%, transparent 60%),
-    linear-gradient(to bottom, var(--background), var(--background-secondary));
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(96,165,250,.04) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(167,139,250,.04) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(34,197,94,.02) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      to bottom,
+      var(--background),
+      var(--background-secondary)
+    );
 }
 
 /* LIGHT THEME */
+
 body[data-theme="light"] {
+  /* Backgrounds */
   --background: #f8fafc;
   --background-secondary: #e2e8f0;
 
-  --card: #ffffff;
-  --surface: #f1f5f9;
+  /* Surfaces */
+  --card-color: #ffffff;
+  --card-hover: #f1f5f9;
+  --panel-bg: #ffffff;
+  --input-bg: #f8fafc;
 
-  --text: #111827;
+  /* Typography */
+  --heading-color: #0f172a;
+  --text-primary: #1e293b;
   --text-secondary: #475569;
+  --text-muted: #64748b;
 
-  --border: rgba(15, 23, 42, .08);
+  /* Borders */
+  --border-color: #cbd5e1;
 
-  --primary: #4f46e5;
-  --accent: #22c55e;
+  /* Status */
+  --success-color: #16a34a;
+  --warning-color: #d97706;
+  --danger-color: #dc2626;
+  --info-color: #2563eb;
 
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #2563eb;
+  /* Card shadows */
+  --card-shadow:
+    0 4px 18px rgba(0,0,0,.08);
 
+  --card-shadow-hover:
+    0 8px 24px rgba(0,0,0,.12);
+
+  /* Priority badges */
+  --priority-high-bg: #fee2e2;
+  --priority-high-text: #b91c1c;
+
+  --priority-medium-bg: #fef3c7;
+  --priority-medium-text: #92400e;
+
+  --priority-low-bg: #dbeafe;
+  --priority-low-text: #1d4ed8;
+
+  /* Background */
   --bg-gradient:
-    radial-gradient(circle at 10% 20%, rgba(96,165,250,.05) 0%, transparent 40%),
-    radial-gradient(circle at 90% 80%, rgba(167,139,250,.05) 0%, transparent 40%),
-    linear-gradient(to bottom, var(--background), var(--background-secondary));
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(96,165,250,.05) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 90% 80%,
+      rgba(167,139,250,.05) 0%,
+      transparent 40%
+    ),
+    linear-gradient(
+      to bottom,
+      var(--background),
+      var(--background-secondary)
+    );
 }
 
 /* GLOBAL STYLES */
+
 *,
 *::before,
 *::after {
@@ -80,7 +158,8 @@ body {
   background-image: var(--bg-gradient);
   background-attachment: fixed;
 
-  color: var(--text);
+  color: var(--text-primary);
+
   transition:
     background-color .3s ease,
     color .3s ease;
