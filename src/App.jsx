@@ -305,6 +305,7 @@ function App() {
             scholarships={scholarships}
             totalScholarshipMoney={totalScholarshipMoney}
             handleAddButton={handleAddButton}
+            profile={profile}
           />
         }
         />

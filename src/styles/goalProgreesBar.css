@@ -1,0 +1,55 @@
+/* GOAL PROGRESS BAR */
+.progress-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.progress-card h2 {
+    text-align: center;
+    width: 100%;
+}
+
+.progress-metrics {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    font-size: 1.05rem;
+}
+
+.metrics-secured {
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.metrics-target {
+    color: var(--text-secondary);
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 14px;
+    background-color: var(--background, #040812);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--accent-color));
+    border-radius: 8px;
+    transition: width 0.5s ease-out;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.2);
+}
+
+.progress-percentage {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 4px;
+}

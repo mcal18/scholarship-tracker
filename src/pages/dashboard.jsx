@@ -5,23 +5,26 @@ import UpcomingDeadlines from '../components/dashboard/upcomingDeadlines';
 import MonthlyCharts from '../components/dashboard/monthlyCharts';
 import RecentActivity from '../components/dashboard/recentActivity';
 import QuickActions from "../components/dashboard/quickActions";
+import GoalProgressBar from "../components/goalProgressBar";
 
 function Dashboard({
     scholarships,
     totalScholarshipMoney,
-    handleAddButton }) {
+    handleAddButton,
+    profile }) {
     return (
         <>
             <div className="dashboard-page">
                 <div className="summary-container">
                     <StatsPanel scholarships={scholarships} />
                     <TotalTracker totalMoney={totalScholarshipMoney} />
+                    <GoalProgressBar scholarships={scholarships} profile={profile} />
                 </div>
 
                 <div className="dashboard-grid">
                     <section className="dashboard-card upcoming-deadlines">
                         <h2>Upcoming Deadlines</h2>
-                        <UpcomingDeadlines scholarships={scholarships}/>
+                        <UpcomingDeadlines scholarships={scholarships} />
                     </section>
 
                     <section className="dashboard-card monthly-chart">
@@ -36,7 +39,7 @@ function Dashboard({
 
                     <section className="dashboard-card quick-actions">
                         <h2>Quick Actions</h2>
-                        <QuickActions 
+                        <QuickActions
                             scholarships={scholarships}
                             onAddScholarship={handleAddButton}
                         />
