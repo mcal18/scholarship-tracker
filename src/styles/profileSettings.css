@@ -1,0 +1,83 @@
+/* READ-ONLY DISPLAY PANEL */
+.profile-display-panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-panel-title {
+    margin-top: 0;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.no-profile-data {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.profile-info-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 10px;
+}
+
+.profile-info-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-field-label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.profile-field-value {
+    color: var(--text-primary);
+    font-size: 1rem;
+}
+
+.highlighted-goal {
+    font-weight: 600;
+}
+
+/* ICONS */
+.profile-icon {
+    font-size: 1.2rem;
+}
+
+.icon-user { color: var(--accent-color); }
+.icon-education { color: var(--info-color); }
+.icon-goal { color: var(--warning-color); }
+
+/* POPOP PROFILE CONTEXT FIELD */
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-submit-btn {
+    margin-top: 10px;
+}
+
+.modal-heading {
+    color: var(--heading-color);
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}

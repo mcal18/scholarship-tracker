@@ -293,7 +293,11 @@ function App() {
           </form>
         </div>
       )}
-      <Header />
+      <Header 
+      scholarships={scholarships}
+      profile={profile}
+      setProfile={setProfile}
+      />
       <Toaster position='bottom-right' reverseOrder={false} />
       <Routes>
         <Route path="/" element={
