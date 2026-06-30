@@ -1,3 +1,10 @@
+import {
+    FiUser,
+    FiTarget,
+    FiAlertTriangle,
+    FiClock,
+    FiBookOpen
+} from "react-icons/fi"
 import "../styles/dashboard.css"
 import TotalTracker from '../components/TotalTracker';
 import StatsPanel from '../components/statsPanel';
@@ -6,14 +13,69 @@ import MonthlyCharts from '../components/dashboard/monthlyCharts';
 import RecentActivity from '../components/dashboard/recentActivity';
 import QuickActions from "../components/dashboard/quickActions";
 import GoalProgressBar from "../components/goalProgressBar";
+import { generateDashboardMessage } from '../utils/generateDashboardMessage';
+import { FiCompass } from "react-icons/fi";
 
 function Dashboard({
     scholarships,
     totalScholarshipMoney,
     handleAddButton,
     profile }) {
+
+    const insights = generateDashboardMessage(profile, scholarships);
     return (
         <>
+            <div className="dashboard-card personalized-card">
+                <h2> ✨ Personalized Insights </h2>
+
+                {typeof insights === "string" ? (
+                    <p>{insights}</p>
+                ) : (
+                    <div className="personalized-list">
+                        <div className="personalized-list-title">
+                            <FiUser className="personalized-icon" />
+
+                            <div className="greeting" >
+                                <h2>{insights.greeting}</h2>
+                            </div>
+                        </div>
+
+                        <div className="personalized-item">
+                            <FiBookOpen className="personalized-icon" />
+
+                            <div>
+                                <strong>Academic Advice</strong>
+                                <p>{insights.majorAdvice}</p>
+                            </div>
+                        </div>
+
+                        <div className="personalized-item">
+                            <FiUser className="personalized-icon" />
+
+                            <div>
+                                <strong>Funding Goal</strong>
+                                <p>{insights.totalAmount.toLocaleString()}{" / "}${insights.goal.toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="dashboard-motivation">
+                    {insights.highPriorityCount > 0
+                        ? "🔥 Focus on your high-priority scholarships this week."
+                        : "🚀 Great job staying on top of your applications."}
+                </div>
+                <div className="recommendation-tags">
+                    {insights.recommendedCategories?.map(
+                        category => (
+                            <span key={category} className="recommendation-tag">
+                                {category}
+                            </span>
+                        )
+                    )}
+                </div>
+            </div>
+
             <div className="dashboard-page">
                 <div className="summary-container">
                     <StatsPanel scholarships={scholarships} />

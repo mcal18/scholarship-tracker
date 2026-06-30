@@ -1,5 +1,4 @@
-import Sidebar from '../components/sidebar';
-import ControlsPanel from '../components/ControlsPanel';
+import ControlsPanel from '../components/controlsPanel';
 import {
     FiEdit2,
     FiTrash2,
@@ -34,22 +33,27 @@ function Scholarships({
                     const countdown = getDaysRemaining(scholarship.deadline);
                     return (
                         <div key={scholarship.id} className='scholarship-card'>
-                            <div className='card-header'>
-                                <h3 className='card-title'>{scholarship.scholarshipName}</h3>
-                                <div className="header-actions">
+                            <div className="card-header">
+                                <h3 className="card-title">
+                                    {scholarship.scholarshipName}
+                                </h3>
+
+                                {/* Unified container for right-aligned elements */}
+                                <div className="header-meta-actions">
                                     <span className={`priority-badge priority-${scholarship.priority?.toLowerCase()}`}>
                                         <FaFire /> {scholarship.priority}
                                     </span>
-                                    <button className="edit-btn" onClick={() => handleEdit(scholarship)} title='Edit Scholarship'>
-                                        <FiEdit2 />
-                                    </button>
-                                    <button className='delete-btn' onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} title='Delete Scholarship'>
-                                        <FiTrash2 />
-                                    </button>
+
+                                    <div className="action-buttons-group">
+                                        <button className="edit-btn" onClick={() => handleEdit(scholarship)} title="Edit Scholarship">
+                                            <FiEdit2 />
+                                        </button>
+                                        <button className="delete-btn" onClick={() => handleDelete(scholarship.id, scholarship.scholarshipName)} title="Delete Scholarship">
+                                            <FiTrash2 />
+                                        </button>
+                                    </div>
                                 </div>
-
                             </div>
-
                             <hr className='card-divider' />
 
                             <div>
@@ -72,8 +76,15 @@ function Scholarships({
                                     </div>
                                 </div>
                                 <div>
-                                    <span className='info-label'><FiCheckSquare /> Status</span>
-                                    <span className={`meta-value ${scholarship.status === 'Won' ? 'status-won' : ''}`}>
+                                    <span className='info-label'>
+                                        <FiCheckSquare /> Status
+                                    </span>
+
+                                    <span
+                                        className={`status-badge status-${scholarship.status
+                                            .toLowerCase()
+                                            .replace(/\s+/g, '-')}`}
+                                    >
                                         {scholarship.status}
                                     </span>
                                 </div>

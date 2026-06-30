@@ -8,7 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Routes, Route } from "react-router-dom";
 import { formatDate, getDaysRemaining } from './utils/dateUtils';
 import Header from './components/header';
-import ControlsPanel from './components/ControlsPanel';
+import ControlsPanel from './components/controlsPanel';
 import TotalTracker from './components/TotalTracker';
 import StatsPanel from './components/statsPanel';
 import Dashboard from './pages/dashboard';
