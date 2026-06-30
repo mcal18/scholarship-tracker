@@ -1,16 +1,13 @@
 import './styles.js';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { FiEdit2, FiTrash2, FiCalendar, FiCheckSquare, FiX } from 'react-icons/fi';
-import { FaFire } from 'react-icons/fa';
-import { RiMoneyDollarCircleLine, RiTumblrFill } from 'react-icons/ri';
 import toast, { Toaster } from 'react-hot-toast';
 import { Routes, Route } from "react-router-dom";
-import { formatDate, getDaysRemaining } from './utils/dateUtils';
+import { FiX } from 'react-icons/fi';
+
+import AuthPage from './pages/auth';
+import ProtectedRoute from './components/protectedRoute'
 import Header from './components/header';
-import ControlsPanel from './components/controlsPanel';
-import TotalTracker from './components/TotalTracker';
-import StatsPanel from './components/statsPanel';
 import Dashboard from './pages/dashboard';
 import Scholarships from './pages/scholarships';
 import Calendar from './pages/calendar';
@@ -18,19 +15,14 @@ import Analytics from './pages/analytics';
 import Settings from './pages/settings';
 import Notifications from "./pages/notifications";
 
+// FIX: Import the consumer hook (useScholarshipContext) instead of the wrapper component
+import { useScholarshipContext } from './context/scholarshipContext.jsx';
 
 function App() {
-  // Create state to hold the input value
-  const [scholarships, setScholarships] = useState(() => {
-    const savedData = localStorage.getItem('tracked_scholarships');
-    return savedData ? JSON.parse(savedData) : [];
-  });
+  // FIX: Read our global state values out of the custom consumer hook
+  const { scholarships, setScholarships } = useScholarshipContext();
 
-  useEffect(() => {
-    localStorage.setItem('tracked_scholarships', JSON.stringify(scholarships));
-  }, [scholarships]);
-
-  // Hold all form data in a single object state 
+  // Local component states dedicated solely to handling the popup modal form window
   const [formData, setFormData] = useState({
     scholarshipName: '',
     amount: '',
@@ -39,82 +31,71 @@ function App() {
     priority: '',
     notes: ''
   });
-
   const [editId, setEditId] = useState(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [filters, setFilters] = useState({ searchTerm: '', statusFilter: '', priorityFilter: '', sortBy: '' });
 
-  const handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    setFilters({ ...filters, [name]: value });
-  }
-
-  // Universal function for every input
+  // Universal input tracking handler
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-
-    //Updates only the specifc field that triggered the change event
-    setFormData({
-      ...formData,  // Copies all existing fields first
-      [name]: value // Overwrites just the one that changed
-    });
+    setFormData({ ...formData, [name]: value });
   };
 
-  // Triggered when clicking Edit button on a card
-  const handleEdit = (scholarship) => {
-    setEditId(scholarship.id); // Saves the ID of what is being edited
-    setFormData({ ...scholarship });  // Fills the form fields with this data
+  // Opens modal form in a clean state for a new tracking item
+  const handleAddButton = () => {
+    setEditId(null);
+    setFormData({ scholarshipName: '', amount: '', deadline: '', status: '', priority: '', notes: '' });
     setIsFormOpen(true);
+  };
 
-  }
+  // Populates and triggers the form modal window for modification
+  const handleEdit = (scholarship) => {
+    setEditId(scholarship.id);
+    setFormData({ ...scholarship });
+    setIsFormOpen(true);
+  };
 
+  // Resets and minimizes the modal form interface safely
   const handleCancelEdit = () => {
     setEditId(null);
-    setFormData({
-      scholarshipName: '',
-      amount: '',
-      deadline: '',
-      status: '',
-      priority: '',
-      notes: ''
-    });
+    setFormData({ scholarshipName: '', amount: '', deadline: '', status: '', priority: '', notes: '' });
     setIsFormOpen(false);
-  }
+  };
 
-  // Handle the form submission
+  // Intercepts and filters item removals prior to database sync triggers
+  const handleDelete = (id, name) => {
+    const confirmed = window.confirm(`Are you sure you want to delete the "${name}" scholarship?`);
+    if (!confirmed) return;
+    setScholarships(scholarships.filter((item) => item.id !== id));
+    toast.success(`Deleted "${name}"`);
+    if (editId === id) handleCancelEdit();
+    setIsFormOpen(false);
+  };
+
+  // Form persistence submission processor
   const handleSubmit = (event) => {
-    event.preventDefault(); // Prevents browser from refreshing the page
+    event.preventDefault();
 
-    // Validation: prevents submit if fields are empty
     if (!formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority) {
       toast.error("Please fill out all fields!");
       return;
     }
+
     if (formData.status === 'Won') {
-      confetti({
-        particleCount: 150,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe']
-      });
+      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe'] });
       toast.success(`Congratulations! You won ${formData.scholarshipName} 🏆`, { duration: 5000 });
     } else {
       toast.success(editId ? "Scholarship updated!" : "Scholarship tracked successfully!");
     }
 
     if (editId) {
-      setScholarships(scholarships.map(item =>
-        item.id === editId
-          ? { ...formData, id: editId, tasks: item.tasks || [] } // Preserves the tasks!
-          : item
-      ));
+      setScholarships(scholarships.map(item => item.id === editId ? { ...formData, id: editId, tasks: item.tasks || [] } : item));
       setEditId(null);
     } else {
       setScholarships([
         ...scholarships,
         {
           ...formData,
-          id: Date.now(),
+          id: String(Date.now()),
           tasks: [
             { id: 1, text: "Write personal statement essay", completed: false },
             { id: 2, text: "Request letters of recommendation", completed: false },
@@ -124,117 +105,12 @@ function App() {
       ]);
     }
 
-    // Clear form fields after submitting
-    setFormData({
-      scholarshipName: '',
-      amount: '',
-      deadline: '',
-      status: '',
-      priority: '',
-      notes: ''
-    });
+    setFormData({ scholarshipName: '', amount: '', deadline: '', status: '', priority: '', notes: '' });
     setIsFormOpen(false);
   };
-
-  // Define add scholarship button
-  const handleAddButton = () => {
-    setEditId(null);
-    setFormData({
-      scholarshipName: '',
-      amount: '',
-      deadline: '',
-      status: '',
-      priority: '',
-      notes: ''
-    })
-    setIsFormOpen(true);
-  };
-
-  const handleDelete = (id, name) => {
-    const confirmed = window.confirm(`Are you sure you want to delete the "${name}" scholarship?`);
-
-    if (!confirmed) return;
-
-    setScholarships(scholarships.filter((item) => item.id !== id));
-    toast.success(`Deleted "${name}"`);
-    if (editId === id) handleCancelEdit();
-    setIsFormOpen(false);
-  };
-
-  const handleToggleTask = (scholarshipId, taskId) => {
-    setScholarships(scholarships.map(item => {
-      if (item.id === scholarshipId) {
-        const currentTask = item.tasks || [];
-        return {
-          ...item,
-          tasks: currentTask.map(task =>
-            task.id === taskId ? { ...task, completed: !task.completed } : task
-          )
-        };
-      }
-      return item;
-    }));
-  };
-
-  const filteredAndSortedScholarships = scholarships
-    .filter((item) => {
-      // Search filter
-      const matchesSearch = item.scholarshipName
-        .toLowerCase()
-        .includes(filters.searchTerm.toLowerCase());
-
-      // Status filter
-      const matchesStatus = filters.statusFilter === '' || item.status === filters.statusFilter;
-
-      // Priority filter
-      const matchesPriority = filters.priorityFilter === '' || item.priority === filters.priorityFilter;
-
-      return matchesSearch && matchesStatus && matchesPriority;
-    })
-    .sort((a, b) => {
-      // Sort Matrix
-      if (filters.sortBy === 'deadline') {
-        return new Date(a.deadline) - new Date(b.deadline);
-      }
-      if (filters.sortBy === 'amount') {
-        return Number(b.amount) - Number(a.amount);
-      }
-      return 0;
-    });
-
-    const [notificationSettings, setNotificationSettings] = useState({
-      upcomingDeadlines: true,
-      urgentDeadlines: true,
-      priorityScholarships: true,
-      browserNotifications: false
-    });
-
-    const [profile, setProfile] = useState(() => {
-      const saved = localStorage.getItem("profile");
-
-      return saved 
-        ? JSON.parse(saved)
-        : {
-          name: "",
-          major: "",
-          university: "",
-          graduationYear: "",
-          scholarshipGoal: ""
-        };
-    });
-
-    useEffect(() => {
-      localStorage.setItem(
-        "profile",
-        JSON.stringify(profile)
-      );
-    }, [profile]);
-
-  const totalScholarshipMoney = filteredAndSortedScholarships.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
 
   return (
     <>
-
       {isFormOpen && (
         <div className='form-container' onClick={handleCancelEdit}>
           <form onSubmit={handleSubmit} onClick={(e) => e.stopPropagation()}>
@@ -274,92 +150,35 @@ function App() {
             </div>
             <div className='form-group'>
               <label className='form-label'>Application Notes</label>
-              <textarea name="notes"
-                className="form-input form-textarea"
-                value={formData.notes}
-                onChange={handleInputChange}
-                placeholder='Add links, login details, or essay hooks...'
-                rows="3"
-              />
+              <textarea name="notes" className="form-input form-textarea" value={formData.notes} onChange={handleInputChange} placeholder='Add links, login details, or essay hooks...' rows="3" />
             </div>
             <button type="submit" className='submit-btn'>
               {editId ? 'Update Scholarship' : 'Track Scholarship'}
             </button>
             {editId && (
-              <button type='button' className='cancel-btn' onClick={handleCancelEdit}>
-                Cancel
-              </button>
+              <button type='button' className='cancel-btn' onClick={handleCancelEdit}> Cancel </button>
             )}
           </form>
         </div>
       )}
-      <Header 
-      scholarships={scholarships}
-      profile={profile}
-      setProfile={setProfile}
-      />
+
+      <Header />
       <Toaster position='bottom-right' reverseOrder={false} />
+
       <Routes>
-        <Route path="/" element={
-          <Dashboard
-            scholarships={scholarships}
-            totalScholarshipMoney={totalScholarshipMoney}
-            handleAddButton={handleAddButton}
-            profile={profile}
-          />
-        }
-        />
-
+        <Route path='/login' element={<AuthPage />} />
+        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/scholarships" element={
-          <Scholarships
-            scholarships={scholarships}
-            filteredAndSortedScholarships={filteredAndSortedScholarships}
-            handleAddButton={handleAddButton}
-            handleEdit={handleEdit}
-            handleDelete={handleDelete}
-            handleToggleTask={handleToggleTask}
-            formatDate={formatDate}
-            getDaysRemaining={getDaysRemaining}
-            filters={filters}
-            handleFilterChange={handleFilterChange}
+          <Scholarships 
+            handleAddButton={handleAddButton} 
+            handleEdit={handleEdit} 
+            handleDelete={handleDelete} 
           />
-        }
-        />
-
-        <Route path="/calendar"
-          element={
-            <Calendar
-              scholarships={scholarships}
-            />
-          }
-        />
-
-        <Route path="/analytics" element={
-          <Analytics
-            scholarships={scholarships}
-          />
-        }
-        />
-
-        <Route path="/settings" element={
-          <Settings 
-            scholarships={scholarships}
-            setScholarships={setScholarships}
-            notificationSettings={notificationSettings}
-            setNotificationSettings={setNotificationSettings}
-            profile={profile}
-            setProfile={setProfile}
-          />
-        } 
-          />
-
-        <Route
-          path="/notifications" element={
-            <Notifications
-              scholarships={scholarships}
-            />
-          }
-        />
+        } />
+        <Route path="/calendar" element={<Calendar />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/notifications" element={<Notifications />} />
       </Routes>
     </>
   );

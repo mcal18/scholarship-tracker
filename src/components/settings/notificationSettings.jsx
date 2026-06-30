@@ -1,79 +1,43 @@
-import "../../styles/settings.css"
+import "../../styles/settings.css";
+import { useScholarshipContext } from '../../context/scholarshipContext.jsx'; 
 
-function NotificationSettings({
-    notificationSettings,
-    setNotificationSettings
-}) {
+function NotificationSettings() { 
+  const { notificationSettings, setNotificationSettings } = useScholarshipContext();
 
-    const handleToggle = (setting) => {
-        setNotificationSettings((prev) => ({
-            ...prev,
-            [setting]: !prev[setting]
-        }));
-    };
+  const handleToggle = (setting) => {
+    setNotificationSettings((prev) => ({
+      ...prev,
+      [setting]: !prev[setting]
+    }));
+  };
 
-    return (
-        <div className="dashboard-card">
-            <h2>Notifications</h2>
-            <p>
-                Choose which scholarship reminders and alerts you want to receive.
-            </p>
-
-            <div className="setting-options">
-                <label className="settings-toggle">
-                    <input 
-                    type="checkbox" 
-                    checked={notificationSettings.upcomingDeadlines}
-                    onChange={() => 
-                        handleToggle("upcomingDeadlines")
-                    }
-                    />
-                    <span>
-                        Upcoming deadlines (30 days)
-                    </span>
-                </label>
-
-                <label className="settings-toggle">
-                    <input 
-                    type="checkbox" 
-                    checked={notificationSettings.urgentDeadlines}
-                    onChange={() => 
-                        handleToggle("urgentDeadlines")
-                    }
-                    />
-                    <span>
-                        Urgent deadlines (7 days)
-                    </span>
-                </label>
-
-                <label className="settings-toggle">
-                    <input 
-                    type="checkbox" 
-                    checked={notificationSettings.priorityScholarships}
-                    onChange={() => 
-                        handleToggle("priorityScholarships")
-                    }
-                    />
-                    <span>
-                        High Priority scholarships
-                    </span>
-                </label>
-
-                <label className="settings-toggle">
-                    <input 
-                    type="checkbox" 
-                    checked={notificationSettings.browserNotifications}
-                    onChange={() => 
-                        handleToggle("browerNotifications")
-                    }
-                    />
-                    <span>
-                        Browser notifications
-                    </span>
-                </label>
-            </div>
-        </div>
-    );
+  return (
+    <div className="dashboard-card">
+      <h2>Notifications</h2>
+      <p>
+        Choose which scholarship reminders and alerts you want to receive.
+      </p>
+      <div className="setting-options">
+        <label className="settings-toggle">
+          <input 
+            type="checkbox" 
+            checked={!!notificationSettings.emailAlerts} 
+            onChange={() => handleToggle("emailAlerts")} 
+          />
+          <span> Email Alerts </span>
+        </label>
+        
+        <label className="settings-toggle">
+          <input 
+            type="checkbox" 
+            checked={!!notificationSettings.deadlineReminders} 
+            onChange={() => handleToggle("deadlineReminders")} 
+          />
+          <span> Deadline Reminders </span>
+        </label>
+      </div>
+    </div>
+  );
 }
 
 export default NotificationSettings;
