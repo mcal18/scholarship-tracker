@@ -1,30 +1,39 @@
-import { useState } from 'react'; // Cleaned up unused 'act' import
-import { NavLink } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import logoImg from '../imgs/logo.png';
 import Modal from '../components/modal';
 import NotificationCenter from './notifications/notificationCenter';
 import { FaBell } from 'react-icons/fa';
-import { FiSettings, FiUser } from 'react-icons/fi';
+import { FiSettings, FiUser, FiLogOut } from 'react-icons/fi';
 import { getDaysRemaining } from '../utils/dateUtils';
 import ProfileSettings from './settings/profileSettings';
+import { useAuth } from '../context/authContext';
+import { useScholarshipContext } from '../context/scholarshipContext';
 
-function Header({ 
-  scholarships,
-  profile,
-  setProfile
-}) {
+function Header() {
+  const { logout, user } = useAuth();
+  const { scholarships, profile, setProfile } = useScholarshipContext();
+
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleNotificationClick = (e) => {
     e.preventDefault();
     setIsNotificationOpen(true);
   };
-
-  const handleProfileClick = (e) => {
-    e.preventDefault();
-    setIsProfileOpen(true);
-  }
 
   const activeScholarships = scholarships || [];
 
@@ -36,7 +45,6 @@ function Header({
     const isApproaching = countdown.text === "3 days left" || countdown.text === "7 days left";
     const isOverdue = countdown.text === "Overdue";
 
-    // FIXED: Corrected 'scholars' to 'scholarship' and 'Not Starteds' to 'Not Started'
     const isHighPriorityUnstarted = scholarship.priority === "High" && scholarship.status === "Not Started";
 
     return isDueToday || isApproaching || isOverdue || isHighPriorityUnstarted;
@@ -49,7 +57,6 @@ function Header({
       </div>
       <p className='page-subtitle'>Track every scholarship in one place</p>
 
-      {/* FIXED: The navigation links are now isolated to prevent layout bugs */}
       <nav className="main-nav">
         <NavLink to="/">Dashboard</NavLink>
         <NavLink to="/scholarships">Scholarships</NavLink>
@@ -57,8 +64,7 @@ function Header({
         <NavLink to="/analytics">Analytics</NavLink>
       </nav>
 
-      {/* FIXED: Pushed completely outside the nav container for precise top-right CSS grid targeting */}
-      <div className="header-actions">
+      <div className="header-actions" ref={dropdownRef}>
         <button
           onClick={handleNotificationClick}
           className="header-action-btn notification-bell-btn"
@@ -68,26 +74,46 @@ function Header({
           {hasNotifications && <span className="notification-badge" />}
         </button>
 
-        <NavLink
-          to="/settings"
-          className="header-action-btn settings-icon-btn"
-          aria-label="Open Settings"
-        >
-          <FiSettings />
-        </NavLink>
+        {user && (
+          <div className="profile-menu-container">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className={`header-action-btn profile-btn ${isDropdownOpen ? 'active' : ''}`}
+              aria-label='Toggle Account Profile Dropdown'
+            >
+              <FiUser />
+            </button>
 
-        <button
-          onClick={handleProfileClick}
-          className="header-action-btn profile-btn"
-          arial-label="Edit Profile"
-        >
-          <FiUser />
-        </button>
+            {isDropdownOpen && (
+              <div className="profile-dropdown-menu">
+                <div className="dropdown-user-info">
+                  <span className="user-email-label">{user?.email}</span>
+                </div>
+                <hr className="dropdown-divider" />
+                <button className="dropdown-item" onClick={() => { setIsDropdownOpen(false); setIsProfileOpen(true); }} >
+                  <FiUser /> <span>Edit Profile</span>
+                </button>
+                <Link
+                  to='/settings'
+                  className="dropdown-item"
+                  onClick={() => setIsDropdownOpen(false)}
+                >
+                  <FiSettings /> <span>Account Settings</span>
+                </Link>
+                <button
+                  className="dropdown-item"
+                  onClick={() => { setIsDropdownOpen(false); logout(); }}
+                >
+                  <FiLogOut /> <span>Sign Out</span>
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* FIXED: Clean modal overlay breakout placement outside navigation layout flow */}
       <Modal isOpen={isNotificationOpen} onClose={() => setIsNotificationOpen(false)}>
-        <h2 style={{ color: 'var(--heading-color)', marginBottom: '18px', fontSize: '1.4rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+        <h2>
           Notifications
         </h2>
         <NotificationCenter scholarships={scholarships} />
@@ -102,7 +128,6 @@ function Header({
           isFormOnly={(true)}
         />
       </Modal>
-
     </header>
   );
 }

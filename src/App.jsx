@@ -6,7 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import { FiX } from 'react-icons/fi';
 
 import AuthPage from './pages/auth';
-import ProtectedRoute from './components/protectedRoute'
+import ProtectedRoute from './components/protectedRoute';
 import Header from './components/header';
 import Dashboard from './pages/dashboard';
 import Scholarships from './pages/scholarships';
@@ -15,12 +15,14 @@ import Analytics from './pages/analytics';
 import Settings from './pages/settings';
 import Notifications from "./pages/notifications";
 
-// FIX: Import the consumer hook (useScholarshipContext) instead of the wrapper component
 import { useScholarshipContext } from './context/scholarshipContext.jsx';
+import { db } from './config/firebase';
+import { useAuth } from './context/authContext';
+import { collection, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 function App() {
-  // FIX: Read our global state values out of the custom consumer hook
   const { scholarships, setScholarships } = useScholarshipContext();
+  const { user } = useAuth(); 
 
   // Local component states dedicated solely to handling the popup modal form window
   const [formData, setFormData] = useState({
@@ -62,17 +64,25 @@ function App() {
   };
 
   // Intercepts and filters item removals prior to database sync triggers
-  const handleDelete = (id, name) => {
+  const handleDelete = async (id, name) => {
     const confirmed = window.confirm(`Are you sure you want to delete the "${name}" scholarship?`);
     if (!confirmed) return;
-    setScholarships(scholarships.filter((item) => item.id !== id));
-    toast.success(`Deleted "${name}"`);
-    if (editId === id) handleCancelEdit();
-    setIsFormOpen(false);
+
+    try {
+      if (!user) return;
+      // Remotely destroys document from cloud tables
+      await deleteDoc(doc(db, `users/${user.uid}/scholarships`, id));
+      toast.success(`Deleted "${name}"`);
+      if (editId === id) handleCancelEdit();
+      setIsFormOpen(false);
+    } catch (err) {
+      console.error("Deletion failed:", err);
+      toast.error("Could not complete deletion.");
+    }
   };
 
   // Form persistence submission processor
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!formData.scholarshipName || !formData.amount || !formData.deadline || !formData.status || !formData.priority) {
@@ -80,33 +90,52 @@ function App() {
       return;
     }
 
-    if (formData.status === 'Won') {
-      confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe'] });
-      toast.success(`Congratulations! You won ${formData.scholarshipName} 🏆`, { duration: 5000 });
-    } else {
-      toast.success(editId ? "Scholarship updated!" : "Scholarship tracked successfully!");
-    }
+    try {
+      if (!user) return;
+      const userScholarshipsCollection = collection(db, `users/${user.uid}/scholarships`);
 
-    if (editId) {
-      setScholarships(scholarships.map(item => item.id === editId ? { ...formData, id: editId, tasks: item.tasks || [] } : item));
-      setEditId(null);
-    } else {
-      setScholarships([
-        ...scholarships,
-        {
-          ...formData,
-          id: String(Date.now()),
+      if (formData.status === 'Won') {
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#22c55e', '#fbbf24', '#60a5fa', '#fffffe'] });
+        toast.success(`Congratulations! You won ${formData.scholarshipName} 🏆`, { duration: 5000 });
+      } else {
+        toast.success(editId ? "Scholarship updated!" : "Scholarship tracked successfully!");
+      }
+
+      if (editId) {
+        // Update existing item in the cloud
+        const docRef = doc(db, `users/${user.uid}/scholarships`, editId);
+        await updateDoc(docRef, {
+          scholarshipName: formData.scholarshipName,
+          amount: Number(formData.amount),
+          deadline: formData.deadline,
+          status: formData.status,
+          priority: formData.priority,
+          notes: formData.notes || ''
+        });
+      } else {
+        // Add completely fresh item into user collection
+        await addDoc(userScholarshipsCollection, {
+          scholarshipName: formData.scholarshipName,
+          amount: Number(formData.amount),
+          deadline: formData.deadline,
+          status: formData.status,
+          priority: formData.priority,
+          notes: formData.notes || '',
           tasks: [
             { id: 1, text: "Write personal statement essay", completed: false },
             { id: 2, text: "Request letters of recommendation", completed: false },
             { id: 3, text: "Gather official academic transcripts", completed: false }
           ]
-        }
-      ]);
-    }
+        });
+      }
 
-    setFormData({ scholarshipName: '', amount: '', deadline: '', status: '', priority: '', notes: '' });
-    setIsFormOpen(false);
+      setFormData({ scholarshipName: '', amount: '', deadline: '', status: '', priority: '', notes: '' });
+      setIsFormOpen(false);
+      setEditId(null);
+    } catch (err) {
+      console.error("Form submit failed:", err);
+      toast.error("An issue occurred while saving your data.");
+    }
   };
 
   return (
@@ -167,18 +196,17 @@ function App() {
 
       <Routes>
         <Route path='/login' element={<AuthPage />} />
+        
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/scholarships" element={
-          <Scholarships 
-            handleAddButton={handleAddButton} 
-            handleEdit={handleEdit} 
-            handleDelete={handleDelete} 
-          />
+          <ProtectedRoute>
+            <Scholarships handleAddButton={handleAddButton} handleEdit={handleEdit} handleDelete={handleDelete} />
+          </ProtectedRoute>
         } />
-        <Route path="/calendar" element={<Calendar />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/calendar" element={<ProtectedRoute><Calendar /></ProtectedRoute>} />
+        <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
       </Routes>
     </>
   );
