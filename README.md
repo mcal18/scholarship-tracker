@@ -12,8 +12,6 @@ ScholarTrack is an enterprise-ready, real-time tracking application dashboard pl
 | --- | --- |
 | ![Dashboard UI Preview](src/imgs/dashboard.png) | ![Calendar UI Preview](src/imgs/calendar.png) |
 
-*💡 Developer Portfolio Tip: Once you have a moment, capture a quick screenshot or high-resolution looping GIF of your live dashboard and update these image links to showcase your actual styled interface panels!*
-
 ---
 
 ## ⚡ Core Application Architecture Highlights
