@@ -1,6 +1,6 @@
 import { FiUser, FiBookOpen } from "react-icons/fi"
 import "../styles/dashboard.css"
-import TotalTracker from '../components/TotalTracker';
+import TotalTracker from '../components/totalTracker';
 import StatsPanel from '../components/statsPanel';
 import UpcomingDeadlines from '../components/dashboard/upcomingDeadlines';
 import MonthlyCharts from '../components/dashboard/monthlyCharts';
